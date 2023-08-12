@@ -1,0 +1,2 @@
+2) Use Spacy (if English), and a Turkish NER to detect LOC/ORG etc entities
+3) Map those to their corresponding cities
