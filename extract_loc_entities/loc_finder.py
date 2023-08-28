@@ -17,7 +17,7 @@ def detect_lang(tweet):
     return (detect(tweet))
 
 # returns a list of entities in the sentence
-def give_loc_ents(tweet, lang):
+def give_loc_ents(tweet, lang):   
     return_list = []
     if lang == "en":
         doc = nlp(tweet)
@@ -62,7 +62,7 @@ def give_loc_ents(tweet, lang):
                             add += (item + " ")
                 if i < (len(nlp)-1):
                     d = i+1
-                    while nlp[d]["entity"] == "I-ORGANIZATION":
+                    while nlp[d]["entity"] == "I-LOCATION":
                         word = nlp[d]["word"].replace("#", "")
                         for item in word_list:
                             if word in item:
@@ -75,3 +75,4 @@ def give_loc_ents(tweet, lang):
                 return_list.append(add[:-1])
 
         return return_list
+    
