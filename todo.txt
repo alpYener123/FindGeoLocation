@@ -2,7 +2,7 @@
     - dene class .py dosyasında yazan metodu, işe yarasın
     - işe yarayınca yapıya baya el at, düzenle
         - fonksiyon sayısını arttır, kullanımı kolaylaştır
-        - liste kullanmadan yapmaya çalış
+        - liste kullanmadan yapmaya çalış gatherloc kısımlarını
 
 
 2) Bak bölgesel rekabet gücünü nasıl belirlemişler alınan para veya teknolojik gelişim ile ilgiliyse güzel olur
@@ -10,4 +10,4 @@ http://160.75.25.161/index.php/itudergisi_a/article/viewFile/1060/1009
 Rekabet gücü kent düzeyinde ele alındığında “yaşam kalitesi” kavramının vurgulandığı görülmektedir. Yaşam kalitesini belirleyen başlıca faktörler ise istihdam
 düzeyi ve verimliliktir
 
-3) bir daha run'la elindekileri, emin ol çalıştıklarından. Sonra Onur Hoca'ya yaz
+3) bir daha run'la elindekileri, emin ol çalıştıklarından. Alabileceğin tüm data'yı al (guess, without guess falan hepsi). Sonra Onur Hoca'ya yaz
