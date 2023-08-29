@@ -1,7 +1,8 @@
-1) MSE gibi data çıkart ne kadar reliable diye (residuallara bakabilirsin büyük populasyon büyük hata tarzı fazladan aza graph şehir bazlı)
-
-
 2) Onur Hocanın wp bak github'daki adamın yaptığını TR için yapmaya çalış (yapabileceğini düşünüyorsan ona göre dict oluştur loc bildiğin user'lar ve tweet content'leri diye)
+MESELA:
+- KODLARI ANLA NE YAPIYO DIYE
+- Kendin de extract_loc_entities kullan
+- LOC entity'leri map'le yerine
 
 
 3) Bak bölgesel rekabet gücünü nasıl belirlemişler alınan para veya teknolojik gelişim ile ilgiliyse güzel olur
