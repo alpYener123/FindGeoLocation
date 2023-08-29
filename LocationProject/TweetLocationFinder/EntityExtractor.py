@@ -7,6 +7,16 @@ from transformers import pipeline, AutoModelForTokenClassification, AutoTokenize
 from transformers import AutoTokenizer, AutoModelForTokenClassification
 from transformers import pipeline
 
+
+'''
+USAGE:
+1) Get the language
+2) get the loc_ents as a list
+3) use gather.ilce_dict etc and every string in the list with is_substring_in_nested_dict function
+4) use find_city function
+5) voila
+'''
+
 class EntityExtractor:
 
     def __init__(self):
@@ -88,11 +98,12 @@ class EntityExtractor:
             return return_list
 
 
-def is_substring_in_nested_dict(dct, target_string):
+def is_substring_in_nested_dict(dct, target_string, check=False):
     for key, value in dct.items():
         if isinstance(value, dict):
-            if is_substring_in_nested_dict(value, target_string):
-                return True
-        elif isinstance(key, str) and key in target_string:
+            result = is_substring_in_nested_dict(value, target_string, check=True)
+            if result is not False:
+                return result
+        elif isinstance(key, str) and key in target_string and check:
             return key
-    return "Could not find"
+    return False

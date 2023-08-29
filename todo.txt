@@ -1,15 +1,13 @@
-2) Onur Hocanın wp bak github'daki adamın yaptığını TR için yapmaya çalış (yapabileceğini düşünüyorsan ona göre dict oluştur loc bildiğin user'lar ve tweet content'leri diye)
-MESELA:
-- KODLARI ANLA NE YAPIYO DIYE
-- Kendin de extract_loc_entities kullan
-- LOC entity'leri map'le yerine
+1) EntityExtractor:
+    - dene class .py dosyasında yazan metodu, işe yarasın
+    - işe yarayınca yapıya baya el at, düzenle
+        - fonksiyon sayısını arttır, kullanımı kolaylaştır
+        - liste kullanmadan yapmaya çalış
 
 
-3) Bak bölgesel rekabet gücünü nasıl belirlemişler alınan para veya teknolojik gelişim ile ilgiliyse güzel olur
+2) Bak bölgesel rekabet gücünü nasıl belirlemişler alınan para veya teknolojik gelişim ile ilgiliyse güzel olur
 http://160.75.25.161/index.php/itudergisi_a/article/viewFile/1060/1009
 Rekabet gücü kent düzeyinde ele alındığında “yaşam kalitesi” kavramının vurgulandığı görülmektedir. Yaşam kalitesini belirleyen başlıca faktörler ise istihdam
 düzeyi ve verimliliktir
 
-4) try to find a way to do it without using lists
-
-5) use a lot more functions for the package, after that rerun all the functions to finalize
+3) bir daha run'la elindekileri, emin ol çalıştıklarından. Sonra Onur Hoca'ya yaz
