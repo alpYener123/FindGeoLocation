@@ -1,5 +1,4 @@
 1) EntityExtractor:
-    - dene class .py dosyasında yazan metodu, işe yarasın
     - işe yarayınca yapıya baya el at, düzenle
         - fonksiyon sayısını arttır, kullanımı kolaylaştır
         - liste kullanmadan yapmaya çalış gatherloc kısımlarını

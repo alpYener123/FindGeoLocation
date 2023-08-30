@@ -28,7 +28,7 @@ class EntityExtractor:
 
     # detects the language
     @staticmethod
-    def detect_lang(self, tweet):
+    def detect_lang(tweet):
         return (detect(tweet))
 
     # returns a list of entities in the sentence
@@ -93,7 +93,7 @@ class EntityExtractor:
                     add = add[:-1]
                     add = unidecode(add.strip())
                     add = add.lower()
-                    return_list.append(add[:-1])
+                    return_list.append(add)
 
             return return_list
 
