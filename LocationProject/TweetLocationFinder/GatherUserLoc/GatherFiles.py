@@ -74,3 +74,49 @@ def get_city_data(path):
     with open(path, "r") as file:
         city_data = json.load(file)
     return city_data
+
+
+
+
+# BELOW PART MAY GO TO ANOTHER FILE, THESE ARE NOT FOR PUBLIC USAGE
+
+def process_kwargs(**kwargs):
+        return_list = []
+        for key, value in kwargs.items():
+            if isinstance(value, list):
+                return_list.append(len(value) - 1)
+                return_list.append(value)
+            else:
+                return False
+        return return_list
+
+
+def recursive_search(sub_dict, st, cities, city=""):
+        for key, value in sub_dict.items():
+            if isinstance(value, dict):
+                cities = recursive_search(value, st, cities, key)
+            elif key in st and city not in cities:
+                cities+=(city+",")
+        return cities
+
+def find_cities(dct, target_string):
+    common = ""
+    common = recursive_search(dct, target_string, common)
+    if len(common) > 0:
+        common = common[:-1]
+        common = common.split(",")
+    return common
+
+def lower_unidecode(tweet):
+    loc = unidecode(tweet.strip())
+    loc = loc.lower()
+    if "/" in loc:
+        loc = loc.split("/")
+    elif "," in loc:
+        loc = loc.split(",")
+    else:
+        loc = loc.split(" ")
+    loc = [element.replace(" ", "") for element in loc]
+
+    return loc
+

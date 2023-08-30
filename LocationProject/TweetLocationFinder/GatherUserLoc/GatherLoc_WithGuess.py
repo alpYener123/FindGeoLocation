@@ -1,4 +1,4 @@
-from .GatherFiles import find_city, get_populations, create_city_list
+from .GatherFiles import find_city, get_populations, create_city_list, process_kwargs, find_cities, lower_unidecode
 import gzip 
 import json
 from tqdm import tqdm
@@ -6,28 +6,28 @@ from unidecode import unidecode
 from shapely.geometry import Point
 import geopandas as gpd
 
-class GatherLoc_WithGuess:
+class GatherLoc_Guess:
 
-    def __init__(self, ilce_dict, semt_dict, mah_dict, ilce_list, semt_list, mah_list, populationPATH, cityPATH):
+    def __init__(self, ilce_dict, semt_dict, mah_dict, populationPATH, cityPATH):
         self.ilce_dict = ilce_dict
         self.semt_dict = semt_dict
         self.mah_dict = mah_dict
         self.populations = get_populations(populationPATH)
         self.cityList = create_city_list(cityPATH)
-        self.ilce_list = ilce_list
-        self.semt_list = semt_list
-        self.mah_list = mah_list
-
+    
     @staticmethod
-    def _process_kwargs(**kwargs):
-        return_list = []
-        for key, value in kwargs.items():
-            if isinstance(value, list):
-                return_list.append(len(value) - 1)
-                return_list.append(value)
-            else:
-                return False
-        return return_list
+    def _guess(self, l):
+        final = 0
+        final_idx = -1
+        for i in l:
+            idx = self.cityList.index(i)
+            pop = self.populations[idx]["population"]
+            if final < pop:
+                final = pop
+                final_idx = idx
+        city = self.cityList[final_idx]
+        return city
+
 
     # Gets the location data on the ["user"]["location"] part of the metadata
     @staticmethod
@@ -43,7 +43,7 @@ class GatherLoc_WithGuess:
 
         check = 0
         if kwargs_count > 0:
-            checklist = self._process_kwargs(**kwargs)
+            checklist = process_kwargs(**kwargs)
             if checklist is not False:
                 if len(checklist) == 2:
                     a = 0
@@ -77,42 +77,29 @@ class GatherLoc_WithGuess:
 
 
                     if tweet["user"]["location"] != '':
-                        loc = unidecode(tweet["user"]["location"].strip())
-                        loc = loc.lower()
-                        if "/" in loc:
-                            loc = loc.split("/")
-                        elif "," in loc:
-                            loc = loc.split(",")
-                        else:
-                            loc = loc.split(" ")
-                        loc = [element.replace(" ", "") for element in loc]
+                        loc = lower_unidecode(tweet["user"]["location"])
 
-                        common_elements = set(loc).intersection(self.cityList)
+                        common_elements = set(loc).intersection(self.cityList)    
                         if common_elements:
                             city = list(common_elements)[0]
                             city_data[city] += 1
                             memberCNT += 1
                             user_list.append(tweet["user"]["id"])
-                            break
+                            break                                                          
                         
                         else:
-                            common_elements = set(loc).intersection(self.ilce_list)
-                            if common_elements:
-                                if len(list(common_elements)) > 1:
-                                    final = 0
-                                    final_idx = -1
-                                    for i in list(common_elements):
-                                        search = find_city(self.ilce_dict, i)
-                                        idx = self.cityList.index(search)
-                                        pop = self.populations[idx]["population"]
-                                        if final < pop:
-                                            final = pop
-                                            final_idx = idx
-                                    
-                                    city = self.cityList[final_idx]
+                            common_elements = []
+
+                            for item in loc:
+                                l = find_cities(self.ilce_dict, item)
+                                if isinstance(l, list):
+                                    common_elements += l
+                            
+                            if len(common_elements) > 0:
+                                if len(common_elements) > 1:
+                                    city = self._guess(self, common_elements)
                                 else:
-                                    ilce = list(common_elements)[0]
-                                    city = find_city(self.ilce_dict, ilce)
+                                    city = common_elements[0]
                                 
                                 city_data[city] += 1
                                 memberCNT += 1
@@ -120,23 +107,18 @@ class GatherLoc_WithGuess:
                                 break
                             
                             else:
-                                common_elements = set(loc).intersection(self.semt_list)
-                                if common_elements:
-                                    if len(list(common_elements)) > 1:
-                                        final = 0
-                                        final_idx = -1
-                                        for i in list(common_elements):
-                                            search = find_city(self.semt_dict, i)
-                                            idx = self.cityList.index(search)
-                                            pop = self.populations[idx]["population"]
-                                            if final < pop:
-                                                final = pop
-                                                final_idx = idx
-                                    
-                                        city = self.cityList[final_idx]
+                                common_elements = []
+
+                                for item in loc:
+                                    l = find_cities(self.semt_dict, item)
+                                    if isinstance(l, list):
+                                        common_elements += l
+                                
+                                if len(common_elements) > 0:
+                                    if len(common_elements) > 1:
+                                        city = self._guess(self, common_elements)
                                     else:
-                                        semt = list(common_elements)[0]
-                                        city = find_city(self.semt_dict, semt)
+                                        city = common_elements[0]
                                     
                                     city_data[city] += 1
                                     memberCNT += 1
@@ -144,31 +126,24 @@ class GatherLoc_WithGuess:
                                     break
 
                                 else:
-                                    common_elements = set(loc).intersection(self.mah_list)
-                                    if common_elements:
-                                        if len(list(common_elements)) > 1:
-                                            final = 0
-                                            final_idx = -1
-                                            for i in list(common_elements):
-                                                search = find_city(self.mah_dict, i)
-                                                idx = self.cityList.index(search)
-                                                pop = self.populations[idx]["population"]
-                                                if final < pop:
-                                                    final = pop
-                                                    final_idx = idx
-                                        
-                                            city = self.cityList[final_idx]
+                                    common_elements = []
+
+                                    for item in loc:
+                                        l = find_cities(self.mah_dict, item)
+                                        if isinstance(l, list):
+                                            common_elements += l
+                                    
+                                    if len(common_elements) > 0:
+                                        if len(common_elements) > 1:
+                                            city = self._guess(self, common_elements)
                                         else:
-                                            mah = list(common_elements)[0]
-                                            city = find_city(self.mah_dict, mah)
+                                            city = common_elements[0]
                                         
                                         city_data[city] += 1
                                         memberCNT += 1
                                         user_list.append(tweet["user"]["id"])
                                         break
                     
-                    else:
-                        break
                 cnt += 1
                 pbar.set_postfix({"Count": cnt, "Successful Count": memberCNT , "List1 idx": a, "List2 idx":b })
 
@@ -215,6 +190,7 @@ class GatherLoc_WithGuess:
                 user_dict = {key: 0 for key in self.cityList}
                 went_in = False
                 for tweet in data:
+
                     if check == 1 or check == 2:
                         if tweet["user"]["id"] == checklist[1][a]:
                             if a < checklist[0]:
@@ -228,15 +204,8 @@ class GatherLoc_WithGuess:
 
                     else:
                         if tweet["place"] is not None:
-                            loc = unidecode(tweet["place"]["full_name"].strip())
-                            loc = loc.lower()
-                            if "/" in loc:
-                                loc = loc.split("/")
-                            elif "," in loc:
-                                loc = loc.split(",")
-                            else:
-                                loc = loc.split(" ")
-                            loc = [element.replace(" ", "") for element in loc]
+                            loc = lower_unidecode(tweet["user"]["location"])
+
 
                             common_elements = set(loc).intersection(self.cityList)
                             if common_elements:
@@ -246,46 +215,36 @@ class GatherLoc_WithGuess:
                                 to_be_appended = tweet["user"]["id"]
                                 
                             else:
-                                common_elements = set(loc).intersection(self.ilce_list)
-                                if common_elements:
-                                    if len(list(common_elements)) > 1:
-                                        final = 0
-                                        final_idx = -1
-                                        for i in list(common_elements):
-                                            search = find_city(self.ilce_dict, i)
-                                            idx = self.cityList.index(search)
-                                            pop = self.populations[idx]["population"]
-                                            if final < pop:
-                                                final = pop
-                                                final_idx = idx
-                                        
-                                        city = self.cityList[final_idx]
+                                common_elements = []
+
+                                for item in loc:
+                                    l = find_cities(self.ilce_dict, item)
+                                    if isinstance(l, list):
+                                        common_elements += l
+                                
+                                if len(common_elements) > 0:
+                                    if len(common_elements) > 1:
+                                        city = self._guess(self, common_elements)
                                     else:
-                                        ilce = list(common_elements)[0]
-                                        city = find_city(self.ilce_dict, ilce)
+                                        city = common_elements[0]
                                     
                                     user_dict[city] += 1
                                     went_in = True
                                     to_be_appended = tweet["user"]["id"]
                                 
                                 else:
-                                    common_elements = set(loc).intersection(self.semt_list)
-                                    if common_elements:
-                                        if len(list(common_elements)) > 1:
-                                            final = 0  
-                                            final_idx = -1
-                                            for i in list(common_elements):
-                                                search = find_city(self.semt_dict, i)
-                                                idx = self.cityList.index(search)
-                                                pop = self.populations[idx]["population"]
-                                                if final < pop:
-                                                    final = pop
-                                                    final_idx = idx
-                                        
-                                            city = self.cityList[final_idx]
+                                    common_elements = []
+
+                                    for item in loc:
+                                        l = find_cities(self.semt_dict, item)
+                                        if isinstance(l, list):
+                                            common_elements += l
+                                    
+                                    if len(common_elements) > 0:
+                                        if len(common_elements) > 1:
+                                            city = self._guess(self, common_elements)
                                         else:
-                                            semt = list(common_elements)[0]
-                                            city = find_city(self.semt_dict, semt)
+                                            city = common_elements[0]
                                         
                                         user_dict[city] += 1
                                         went_in = True
@@ -293,23 +252,18 @@ class GatherLoc_WithGuess:
                                         
 
                                     else:
-                                        common_elements = set(loc).intersection(self.mah_list)
-                                        if common_elements:
-                                            if len(list(common_elements)) > 1:
-                                                final = 0
-                                                final_idx = -1
-                                                for i in list(common_elements):
-                                                    search = find_city(self.mah_dict, i)
-                                                    idx = self.cityList.index(search)
-                                                    pop = self.populations[idx]["population"]
-                                                    if final < pop:
-                                                        final = pop
-                                                        final_idx = idx
-                                            
-                                                city = self.cityList[final_idx]
+                                        common_elements = []
+
+                                        for item in loc:
+                                            l = find_cities(self.mah_dict, item)
+                                            if isinstance(l, list):
+                                                common_elements += l
+                                        
+                                        if len(common_elements) > 0:
+                                            if len(common_elements) > 1:
+                                                city = self._guess(self, common_elements)
                                             else:
-                                                mah = list(common_elements)[0]
-                                                city = find_city(self.mah_dict, mah)
+                                                city = common_elements[0]
                                             
                                             user_dict[city] += 1
                                             went_in = True
