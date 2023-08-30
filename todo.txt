@@ -1,8 +1,10 @@
 1) EntityExtractor:
     - işe yarayınca yapıya baya el at, düzenle
         - fonksiyon sayısını arttır, kullanımı kolaylaştır
-        - liste kullanmadan yapmaya çalış gatherloc kısımlarını
-
+            - GatherLocGuess --> try to have even more functions
+            - have a double check on what the code is doing
+            - clean up gatherfiles, entityextractor etc
+            - implement the changes on GatherLocGuess to without guess
 
 2) Bak bölgesel rekabet gücünü nasıl belirlemişler alınan para veya teknolojik gelişim ile ilgiliyse güzel olur
 http://160.75.25.161/index.php/itudergisi_a/article/viewFile/1060/1009
