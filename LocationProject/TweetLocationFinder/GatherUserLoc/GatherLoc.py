@@ -1,4 +1,3 @@
-from .GatherFiles import find_city, get_populations, create_city_list, process_kwargs, find_cities, lower_unidecode
 import gzip 
 import json
 from tqdm import tqdm
@@ -6,35 +5,50 @@ from unidecode import unidecode
 from shapely.geometry import Point
 import geopandas as gpd
 
-class GatherLoc_Guess:
+class GatherLoc:
 
-    def __init__(self, ilce_dict, semt_dict, mah_dict, populationPATH, cityPATH):
+    def __init__(self, city_list, ilce_dict, semt_dict, mah_dict, populationPATH = None):
         self.ilce_dict = ilce_dict
         self.semt_dict = semt_dict
         self.mah_dict = mah_dict
-        self.populations = get_populations(populationPATH)
-        self.cityList = create_city_list(cityPATH)
+        if populationPATH is not None:
+            self.populations = self._get_populations(populationPATH)
+        self.cityList = city_list
+
+    
+    def _get_populations(pathJSON):
+        with open(pathJSON, "r", encoding="utf-8") as file:
+            populations = json.load(file)
+        return populations
 
 
     @staticmethod
-    def _return_city_guess(self, loc, dic):
+    def _return_city(self, loc, dic, guess_bool):
         common_elements = []
 
         for item in loc:
-            l = find_cities(dic, item)
+            l = self._find_cities(dic, item)
             if isinstance(l, list):
                 common_elements += l
-        
-        if len(common_elements) > 0:
-            if len(common_elements) > 1:
-                city = self._guess(self, common_elements)
-            else:
-                city = common_elements[0]
-            
-            return city
 
+        if guess_bool is False:
+            if len(common_elements) > 0:
+                if len(common_elements) > 1:
+                    city = self._guess(self, common_elements)
+                else:
+                    city = common_elements[0]
+                
+                return city
+
+            else:
+                return False
+        
         else:
-            return False
+            if len(common_elements) == 1:
+                city = common_elements[0]
+                return city
+            else:
+                return False
     
     @staticmethod
     def _guess(self, l):
@@ -49,10 +63,52 @@ class GatherLoc_Guess:
         city = self.cityList[final_idx]
         return city
 
+    @staticmethod
+    def _process_kwargs(**kwargs):
+        return_list = []
+        for key, value in kwargs.items():
+            if isinstance(value, list):
+                return_list.append(len(value) - 1)
+                return_list.append(value)
+            else:
+                return False
+        return return_list
+
+    @staticmethod
+    def _recursive_search(self, sub_dict, st, cities, city=""):
+        for key, value in sub_dict.items():
+            if isinstance(value, dict):
+                cities = self._recursive_search(value, st, cities, key)
+            elif key in st and city not in cities:
+                cities+=(city+",")
+        return cities
+
+    @staticmethod
+    def _find_cities(self, dct, target_string):
+        common = ""
+        common = self._recursive_search(self, dct, target_string, common)
+        if len(common) > 0:
+            common = common[:-1]
+            common = common.split(",")
+        return common
+
+    @staticmethod
+    def _lower_unidecode(tweet):
+        loc = unidecode(tweet.strip())
+        loc = loc.lower()
+        if "/" in loc:
+            loc = loc.split("/")
+        elif "," in loc:
+            loc = loc.split(",")
+        else:
+            loc = loc.split(" ")
+        loc = [element.replace(" ", "") for element in loc]
+
+        return loc
 
     # Gets the location data on the ["user"]["location"] part of the metadata
     @staticmethod
-    def get_user_loc(self, city_data, PATH, result_path_JSON, gathered_user_list_path_TXT, **kwargs):
+    def get_user_loc(self, city_data, PATH, result_path_JSON, gathered_user_list_path_TXT, guess=False, **kwargs):
         
         kwargs_count = len(kwargs)
         if kwargs_count > 2:
@@ -64,7 +120,7 @@ class GatherLoc_Guess:
 
         check = 0
         if kwargs_count > 0:
-            checklist = process_kwargs(**kwargs)
+            checklist = self._process_kwargs(**kwargs)
             if checklist is not False:
                 if len(checklist) == 2:
                     a = 0
@@ -98,7 +154,7 @@ class GatherLoc_Guess:
 
 
                     if tweet["user"]["location"] != '':
-                        loc = lower_unidecode(tweet["user"]["location"])
+                        loc = self._lower_unidecode(tweet["user"]["location"])
 
                         common_elements = set(loc).intersection(self.cityList)    
                         if common_elements:
@@ -109,7 +165,7 @@ class GatherLoc_Guess:
                             break                                                          
                         
                         else: # input loc, dict. return city
-                            city = self._return_city_guess(self, loc, self.ilce_dict)
+                            city = self._return_city(self, loc, self.ilce_dict, guess)
                             
                             if city is not False:
                                 city_data[city] += 1
@@ -118,7 +174,7 @@ class GatherLoc_Guess:
                                 break
                             
                             else:
-                                city = self._return_city_guess(self, loc, self.semt_dict)
+                                city = self._return_city(self, loc, self.semt_dict, guess)
                             
                                 if city is not False:
                                 
@@ -128,7 +184,7 @@ class GatherLoc_Guess:
                                     break
 
                                 else:
-                                    city = self._return_city_guess(self, loc, self.mah_dict)
+                                    city = self._return_city(self, loc, self.mah_dict, guess)
                             
                                     if city is not False:
                                         
@@ -150,7 +206,7 @@ class GatherLoc_Guess:
 
     # Gets the location data on the ["place"]["full_name"] part of the metadata
     @staticmethod
-    def get_tweet_loc(self, city_data, PATH, result_path_JSON, gathered_user_list_path_TXT, **kwargs):
+    def get_tweet_loc(self, city_data, PATH, result_path_JSON, gathered_user_list_path_TXT, guess=False, **kwargs):
         user_place_id = []
         
         kwargs_count = len(kwargs)
@@ -197,7 +253,7 @@ class GatherLoc_Guess:
 
                     else:
                         if tweet["place"] is not None:
-                            loc = lower_unidecode(tweet["user"]["location"])
+                            loc = self._lower_unidecode(tweet["user"]["location"])
 
 
                             common_elements = set(loc).intersection(self.cityList)
@@ -208,7 +264,7 @@ class GatherLoc_Guess:
                                 to_be_appended = tweet["user"]["id"]
                                 
                             else:
-                                city = self._return_city_guess(self, loc, self.ilce_dict)
+                                city = self._return_city(self, loc, self.ilce_dict, guess)
                             
                                 if city is not False:
                                     
@@ -217,7 +273,7 @@ class GatherLoc_Guess:
                                     to_be_appended = tweet["user"]["id"]
                                 
                                 else:
-                                    city = self._return_city_guess(self, loc, self.semt_dict)
+                                    city = self._return_city(self, loc, self.semt_dict, guess)
                             
                                     if city is not False:
                                         
@@ -227,7 +283,7 @@ class GatherLoc_Guess:
                                         
 
                                     else:
-                                        city = self._return_city_guess(self, loc, self.mah_dict)
+                                        city = self._return_city(self, loc, self.mah_dict, guess)
                             
                                         if city is not False:
                                             

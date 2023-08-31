@@ -1,13 +1,14 @@
 1) EntityExtractor:
     - işe yarayınca yapıya baya el at, düzenle
         - fonksiyon sayısını arttır, kullanımı kolaylaştır
-            - have a double check on what the code is doing
-            - clean up gatherfiles, entityextractor etc
-            - implement the changes on GatherLocGuess to without guess
+            - have a double check on what the code is doing, with the gatherer classes
+            - learn what staticmethod is, then use it or not
+            - cleanup EntityExtractor.py (fix the name of the substring nested dict function)
+            - run all the stuff once again, be sure they work. Also, get all the data you can (do it in an example ipynb)
 
 2) Bak bölgesel rekabet gücünü nasıl belirlemişler alınan para veya teknolojik gelişim ile ilgiliyse güzel olur
 http://160.75.25.161/index.php/itudergisi_a/article/viewFile/1060/1009
 Rekabet gücü kent düzeyinde ele alındığında “yaşam kalitesi” kavramının vurgulandığı görülmektedir. Yaşam kalitesini belirleyen başlıca faktörler ise istihdam
 düzeyi ve verimliliktir
 
-3) bir daha run'la elindekileri, emin ol çalıştıklarından. Alabileceğin tüm data'yı al (guess, without guess falan hepsi). Sonra Onur Hoca'ya yaz
+3) Text Ali then Onur Hoca
