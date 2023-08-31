@@ -1,7 +1,6 @@
 1) EntityExtractor:
     - işe yarayınca yapıya baya el at, düzenle
         - fonksiyon sayısını arttır, kullanımı kolaylaştır
-            - GatherLocGuess --> try to have even more functions
             - have a double check on what the code is doing
             - clean up gatherfiles, entityextractor etc
             - implement the changes on GatherLocGuess to without guess

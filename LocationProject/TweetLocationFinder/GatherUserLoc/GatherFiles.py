@@ -119,4 +119,3 @@ def lower_unidecode(tweet):
     loc = [element.replace(" ", "") for element in loc]
 
     return loc
-
