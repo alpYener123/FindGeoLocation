@@ -7,16 +7,6 @@ from transformers import pipeline, AutoModelForTokenClassification, AutoTokenize
 from transformers import AutoTokenizer, AutoModelForTokenClassification
 from transformers import pipeline
 
-
-'''
-USAGE:
-1) Get the language
-2) get the loc_ents as a list
-3) use gather.ilce_dict etc and every string in the list with is_substring_in_nested_dict function
-4) use find_city function
-5) voila
-'''
-
 class EntityExtractor:
 
     def __init__(self, tweet):
@@ -98,6 +88,70 @@ class EntityExtractor:
 
             return return_list
 
+
+    def _find_common_part(self, X, Y):
+        common_part = ""
+
+        # Check if X is in Y
+        if X in Y:
+            # Find the index where X starts in Y
+            start_index = Y.index(X)
+
+            # Extract the common part
+            common_part = Y[start_index:start_index + len(X)]
+
+        return common_part
+
+
+    def _recursive_search(self, sub_dict, st, cities, city=""):
+        for key, value in sub_dict.items():
+            if isinstance(value, dict):
+                cities = self._recursive_search(value, st, cities, key)
+            elif key in st and city not in cities:
+                common = self._find_common_part(key, st)
+                if len(common) + 4 >= len(st) and common[0] == st[0]:
+                    cities+=(city+",")
+        return cities
+
+    def _find_cities(self, dct, target_string):
+        common = ""
+        common = self._recursive_search(dct, target_string, common)
+        if len(common) > 0:
+            common = common[:-1]
+            common = common.split(",")
+        return common
+
+    def show_cities(self, city_list, idct, sdic, mdic, list):
+        ok = False
+        for item in list:
+            for city in city_list:
+                if city in item:
+                    print("Entity", item,"is a city.")
+                    ok = True
+            if ok == False:
+                cities = self._find_cities(idct, item)
+                if len(cities) > 0:
+                    print("Entity", item, "may be on cities:", cities)
+                    print("ilce")
+                else: 
+                    cities = self._find_cities(sdic, item)
+                    if len(cities) > 0:
+                        print("Entity", item, "may be on cities:", cities)
+                        print("semt")
+
+                    else: 
+                        cities = self._find_cities(mdic, item)
+                        if len(cities) > 0:
+                            print("Entity", item, "may be on cities:", cities)
+                            print("mah")
+                        else:
+                            print(":(")
+            ok = False
+
+
+
+
+
     '''def _is_substring_in_nested_dict(self, dct, target_string, check=False, city = ""):
         for key, value in dct.items():
             if isinstance(value, dict):
@@ -127,44 +181,3 @@ class EntityExtractor:
                             print("Entity ", item, " is in city ", mah)
                         else:
                             print("Could not find a corresponding city for ", item)'''
-
-
-    def _recursive_search(self, sub_dict, st, cities, city=""):
-        for key, value in sub_dict.items():
-            if isinstance(value, dict):
-                cities = self._recursive_search(value, st, cities, key)
-            elif key in st and city not in cities:
-                cities+=(city+",")
-        return cities
-
-    def _find_cities(self, dct, target_string):
-        common = ""
-        common = self._recursive_search(dct, target_string, common)
-        if len(common) > 0:
-            common = common[:-1]
-            common = common.split(",")
-        return common
-
-    def show_cities(self, city_list, idct, sdic, mdic, list):
-        ok = False
-        for item in list:
-            for city in city_list:
-                if item in city:
-                    print("Entity", item,"is a city.")
-                    ok = True
-            if ok == False:
-                cities = self._find_cities(idct, item)
-                if len(cities) > 0:
-                    print("Entity", item, "may be on cities:", cities)
-                else: 
-                    cities = self._find_cities(sdic, item)
-                    if len(cities) > 0:
-                        print("Entity", item, "may be on cities:", cities)
-                    else: 
-                        cities = self._find_cities(mdic, item)
-                        if len(cities) > 0:
-                            print("Entity", item, "may be on cities:", cities)
-                        else:
-                            print(":(")
-            ok = False
-
