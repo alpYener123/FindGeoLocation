@@ -32,7 +32,6 @@ class EntityExtractor:
         return (detect(tweet))
 
     # returns a list of entities in the sentence
-    @staticmethod
     def give_loc_ents(self, tweet, lang):
 
         return_list = []
@@ -98,6 +97,8 @@ class EntityExtractor:
             return return_list
 
 
+
+# May be deleted
 def is_substring_in_nested_dict(dct, target_string, check=False):
     for key, value in dct.items():
         if isinstance(value, dict):

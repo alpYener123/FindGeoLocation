@@ -15,14 +15,12 @@ class GatherLoc:
             self.populations = self._get_populations(populationPATH)
         self.cityList = city_list
 
-    
+    @staticmethod
     def _get_populations(pathJSON):
         with open(pathJSON, "r", encoding="utf-8") as file:
             populations = json.load(file)
         return populations
 
-
-    @staticmethod
     def _return_city(self, loc, dic, guess_bool):
         common_elements = []
 
@@ -50,7 +48,6 @@ class GatherLoc:
             else:
                 return False
     
-    @staticmethod
     def _guess(self, l):
         final = 0
         final_idx = -1
@@ -74,7 +71,6 @@ class GatherLoc:
                 return False
         return return_list
 
-    @staticmethod
     def _recursive_search(self, sub_dict, st, cities, city=""):
         for key, value in sub_dict.items():
             if isinstance(value, dict):
@@ -107,7 +103,6 @@ class GatherLoc:
         return loc
 
     # Gets the location data on the ["user"]["location"] part of the metadata
-    @staticmethod
     def get_user_loc(self, city_data, PATH, result_path_JSON, gathered_user_list_path_TXT, guess=False, **kwargs):
         
         kwargs_count = len(kwargs)
@@ -205,7 +200,6 @@ class GatherLoc:
 
 
     # Gets the location data on the ["place"]["full_name"] part of the metadata
-    @staticmethod
     def get_tweet_loc(self, city_data, PATH, result_path_JSON, gathered_user_list_path_TXT, guess=False, **kwargs):
         user_place_id = []
         
@@ -310,7 +304,6 @@ class GatherLoc:
                 file.write(str(item) + '\n')
 
     # Gets the location data on the ["geo"] part of the metadata
-    @staticmethod
     def get_tweet_coord(self, city_data, PATH, turkey_geoJSON_path, result_path_JSON, gathered_user_list_path_TXT, **kwargs): 
         user_geo_id = []
 
