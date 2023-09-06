@@ -89,8 +89,11 @@ class EntityExtractor:
             return return_list
 
 
-    def _find_common_part(self, X, Y):
+    def _find_common_part(self, X, Y, num = 0):
         common_part = ""
+        if num < 0:
+            X = X[:num]
+            Y = Y[:num]
 
         # Check if X is in Y
         if X in Y:
@@ -107,10 +110,18 @@ class EntityExtractor:
         for key, value in sub_dict.items():
             if isinstance(value, dict):
                 cities = self._recursive_search(value, st, cities, key)
-            elif key in st and city not in cities:
-                common = self._find_common_part(key, st)
-                if len(common) + 4 >= len(st) and common[0] == st[0]:
-                    cities+=(city+",")
+            elif city not in cities:
+                if "g" in st:
+                    if key[:-2] in st[:-2]:
+                        common = self._find_common_part(key, st, num = -2)
+                        if len(common) + 4 >= len(st) and common[0] == st[0]:
+                            cities+=(city+",")
+                else:
+                    if key in st:
+                        common = self._find_common_part(key, st)
+                        if len(common) + 4 >= len(st) and common[0] == st[0]:
+                            cities+=(city+",")
+                    
         return cities
 
     def _find_cities(self, dct, target_string):
