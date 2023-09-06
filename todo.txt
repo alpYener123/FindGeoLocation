@@ -2,9 +2,6 @@
     - GATHERLOC / GATHERFILES:
         - check functions (for self argument etc (make jsonpath non-mandatory on create_citylist))
         - add comments
-    - ENTITY EXTRACTOR:
-        - clean out all the mess
-        - add comments
     
     AFTER ALL:
         - run all the stuff once again, be sure they work. Also, get all the data you can (do it in an example ipynb)

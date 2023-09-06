@@ -93,7 +93,7 @@ class EntityExtractor:
                         if len(common) + 4 >= len(st) and common[0] == st[0]:
                             cities+=(city+",")
                 else:
-                    if key in st:
+                    if key in st: # len(common) + 4 since examples like "beylikduzunden" --> "beylikduzu" may occur where the entity gains 4 additional letters
                         common = self._find_common_part(key, st)
                         if len(common) + 4 >= len(st) and common[0] == st[0]:
                             cities+=(city+",")
@@ -130,7 +130,7 @@ class EntityExtractor:
                         if len(cities) > 0:
                             print("Entity", item, "may be on cities:", cities,". Entity is a part of the city called \"mahalle\".")
                         else:
-                            print("No corresponding city has found for entity", item". :(")
+                            print("No corresponding city has found for entity", item,". :(")
             ok = False
 
 
