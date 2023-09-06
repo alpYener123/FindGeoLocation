@@ -31,7 +31,7 @@ class GatherFiles:
         return
 
     # Returns a list with all city names, writes into a JSON file with all cities as keys and all their values to 0
-    def city_list_and_data(citypathTXT, datapathJSON):
+    def city_list_and_data(self, citypathTXT, datapathJSON):
         cityList = []
         with open(citypathTXT, "r", encoding = "utf-8") as file:
             for line in file:
@@ -46,7 +46,7 @@ class GatherFiles:
         return cityList
 
     # To get that city data dictionary
-    def get_city_data(path):
+    def get_city_data(self, path):
         with open(path, "r") as file:
             city_data = json.load(file)
         return city_data
