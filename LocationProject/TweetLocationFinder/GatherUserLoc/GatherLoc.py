@@ -15,11 +15,40 @@ class GatherLoc:
             self.populations = self._get_populations(populationPATH)
         self.cityList = city_list
 
+    def _guess(self, l):
+        final = 0
+        final_idx = -1
+        for i in l:
+            idx = self.cityList.index(i)
+            pop = self.populations[idx]["population"]
+            if final < pop:
+                final = pop
+                final_idx = idx
+        city = self.cityList[final_idx]
+        return city
+
     @staticmethod
     def _get_populations(pathJSON):
         with open(pathJSON, "r", encoding="utf-8") as file:
             populations = json.load(file)
         return populations
+
+    def _recursive_search(self, sub_dict, st, cities, city=""):
+        for key, value in sub_dict.items():
+            if isinstance(value, dict):
+                cities = self._recursive_search(self, value, st, cities, key)
+            elif key in st and city not in cities:
+                cities+=(city+",")
+        return cities
+
+    @staticmethod
+    def _find_cities(self, dct, target_string):
+        common = ""
+        common = self._recursive_search(self, dct, target_string, common)
+        if len(common) > 0:
+            common = common[:-1]
+            common = common.split(",")
+        return common
 
     def _return_city(self, loc, dic, guess_bool):
         common_elements = []
@@ -29,7 +58,7 @@ class GatherLoc:
             if isinstance(l, list):
                 common_elements += l
 
-        if guess_bool is False:
+        if guess_bool is True:
             if len(common_elements) > 0:
                 if len(common_elements) > 1:
                     city = self._guess(self, common_elements)
@@ -47,18 +76,6 @@ class GatherLoc:
                 return city
             else:
                 return False
-    
-    def _guess(self, l):
-        final = 0
-        final_idx = -1
-        for i in l:
-            idx = self.cityList.index(i)
-            pop = self.populations[idx]["population"]
-            if final < pop:
-                final = pop
-                final_idx = idx
-        city = self.cityList[final_idx]
-        return city
 
     @staticmethod
     def _process_kwargs(**kwargs):
@@ -70,23 +87,6 @@ class GatherLoc:
             else:
                 return False
         return return_list
-
-    def _recursive_search(self, sub_dict, st, cities, city=""):
-        for key, value in sub_dict.items():
-            if isinstance(value, dict):
-                cities = self._recursive_search(value, st, cities, key)
-            elif key in st and city not in cities:
-                cities+=(city+",")
-        return cities
-
-    @staticmethod
-    def _find_cities(self, dct, target_string):
-        common = ""
-        common = self._recursive_search(self, dct, target_string, common)
-        if len(common) > 0:
-            common = common[:-1]
-            common = common.split(",")
-        return common
 
     @staticmethod
     def _lower_unidecode(tweet):
@@ -159,7 +159,7 @@ class GatherLoc:
                             user_list.append(tweet["user"]["id"])
                             break                                                          
                         
-                        else: # input loc, dict. return city
+                        else:
                             city = self._return_city(self, loc, self.ilce_dict, guess)
                             
                             if city is not False:

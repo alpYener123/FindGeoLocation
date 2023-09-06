@@ -1,7 +1,6 @@
 1) EntityExtractor:
     - işe yarayınca yapıya baya el at, düzenle
         - fonksiyon sayısını arttır, kullanımı kolaylaştır
-            - have a double check on what the code is doing, with the gatherer classes
             - cleanup EntityExtractor.py (fix the name of the substring nested dict function)
             - run all the stuff once again, be sure they work. Also, get all the data you can (do it in an example ipynb)
 
