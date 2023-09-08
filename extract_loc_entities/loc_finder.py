@@ -32,7 +32,7 @@ def give_loc_ents(tweet, lang):
         word_list = tweet.split(" ")
         nlp = clf(tweet)
         for i in range(0, len(nlp)):
-            if nlp[i]["entity"] == "B-ORGANIZATION":
+            '''if nlp[i]["entity"] == "B-ORGANIZATION":
                 add = ""           
                 word = nlp[i]["word"].replace("#", "")
                 for item in word_list:
@@ -45,15 +45,15 @@ def give_loc_ents(tweet, lang):
                         word = nlp[d]["word"].replace("#", "")
                         for item in word_list:
                             if word in item:
-                                if item not in return_list:
+                                if item not in return_list and item not in add:
                                     add += (item + " ")
                         if d < (len(nlp)-1):
                             d = d+1
                         else:
                             break
-                return_list.append(add[:-1])
+                return_list.append(add[:-1])'''
 
-            elif nlp[i]["entity"] == "B-LOCATION":
+            if nlp[i]["entity"] == "B-LOCATION":
                 add = ""           
                 word = nlp[i]["word"].replace("#", "")
                 for item in word_list:
@@ -66,7 +66,7 @@ def give_loc_ents(tweet, lang):
                         word = nlp[d]["word"].replace("#", "")
                         for item in word_list:
                             if word in item:
-                                if item not in return_list:
+                                if item not in return_list and item not in add:
                                     add += (item + " ")
                         if d < (len(nlp)-1):
                             d = d+1
@@ -76,3 +76,6 @@ def give_loc_ents(tweet, lang):
 
         return return_list
     
+
+
+print(give_loc_ents("Merhaba benim adım Alp. beylikdüzünden geliyorum. Ankaraya geçeceğim", "tr"))
