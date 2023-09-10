@@ -7,10 +7,10 @@ import geopandas as gpd
 
 class GatherLoc:
 
-    def __init__(self, city_list, ilce_dict, semt_dict, mah_dict, populationPATH = None):
-        self.ilce_dict = ilce_dict
-        self.semt_dict = semt_dict
-        self.mah_dict = mah_dict
+    def __init__(self, city_list, files, populationPATH = None):
+        self.ilce_dict = files.ilce_dict
+        self.semt_dict = files.semt_dict
+        self.mah_dict = files.mah_dict
         if populationPATH is not None:
             self.populations = self._get_populations(populationPATH)
         self.cityList = city_list
@@ -47,7 +47,6 @@ class GatherLoc:
         return cities
 
     # Returns a list of cities
-    @staticmethod
     def _find_cities(self, dct, target_string):
         common = ""
         common = self._recursive_search(dct, target_string, common)
@@ -68,7 +67,7 @@ class GatherLoc:
         if guess_bool is True:
             if len(common_elements) > 0:
                 if len(common_elements) > 1:
-                    city = self._guess(self, common_elements)
+                    city = self._guess(common_elements)
                 else:
                     city = common_elements[0]
                 

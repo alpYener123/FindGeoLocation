@@ -4,7 +4,7 @@
             - get all 3 with cumulation, with txt lists, both guess and not guess
             - get all 3 individually, both guess and not guess
         - if the data is ok, gather the graphs accordingly
-        - update readme
+        - update readme, explain accumulation meaning etc
 
 2) Bak bölgesel rekabet gücünü nasıl belirlemişler alınan para veya teknolojik gelişim ile ilgiliyse güzel olur
 http://160.75.25.161/index.php/itudergisi_a/article/viewFile/1060/1009
