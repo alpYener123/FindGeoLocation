@@ -1,6 +1,7 @@
 1) Format:    
     AFTER ALL:
         - run all the stuff once again, be sure they work. Also, get all the data you can (do it in an example ipynb for all packages)
+        - if the data is ok, gather the graphs accordingly
         - update readme
 
 2) Bak bölgesel rekabet gücünü nasıl belirlemişler alınan para veya teknolojik gelişim ile ilgiliyse güzel olur
