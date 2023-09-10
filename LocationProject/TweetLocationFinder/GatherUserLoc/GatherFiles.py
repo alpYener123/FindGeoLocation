@@ -51,12 +51,3 @@ class GatherFiles:
         with open(path, "r") as file:
             city_data = json.load(file)
         return city_data
-
-
-def back_to_forward_slash(path):
-    correct_path = ""
-    for i in path:
-        if i == '\\':
-            i = '/'
-        correct_path += i
-    return correct_path
