@@ -15,6 +15,8 @@ class GatherLoc:
             self.populations = self._get_populations(populationPATH)
         self.cityList = city_list
 
+    # Will be used guess is used
+    # Guesses which city the user is according to the city population
     def _guess(self, l):
         final = 0
         final_idx = -1
@@ -27,29 +29,34 @@ class GatherLoc:
         city = self.cityList[final_idx]
         return city
 
+    # Will be used if guess is used
+    # A getter function for populations
     @staticmethod
     def _get_populations(pathJSON):
         with open(pathJSON, "r", encoding="utf-8") as file:
             populations = json.load(file)
         return populations
 
+    # Returns a string of cities according to the string "st"
     def _recursive_search(self, sub_dict, st, cities, city=""):
         for key, value in sub_dict.items():
             if isinstance(value, dict):
-                cities = self._recursive_search(self, value, st, cities, key)
+                cities = self._recursive_search(value, st, cities, key)
             elif key in st and city not in cities:
                 cities+=(city+",")
         return cities
 
+    # Returns a list of cities
     @staticmethod
     def _find_cities(self, dct, target_string):
         common = ""
-        common = self._recursive_search(self, dct, target_string, common)
+        common = self._recursive_search(dct, target_string, common)
         if len(common) > 0:
             common = common[:-1]
             common = common.split(",")
         return common
 
+    # With the city list, returns the city (if needed, guess is used here)
     def _return_city(self, loc, dic, guess_bool):
         common_elements = []
 
@@ -77,6 +84,7 @@ class GatherLoc:
             else:
                 return False
 
+    # If there are kwargs in the main gatherloc functions
     @staticmethod
     def _process_kwargs(**kwargs):
         return_list = []
@@ -88,6 +96,7 @@ class GatherLoc:
                 return False
         return return_list
 
+    # Styling up the tweet location
     @staticmethod
     def _lower_unidecode(tweet):
         loc = unidecode(tweet.strip())
@@ -160,7 +169,7 @@ class GatherLoc:
                             break                                                          
                         
                         else:
-                            city = self._return_city(self, loc, self.ilce_dict, guess)
+                            city = self._return_city(loc, self.ilce_dict, guess)
                             
                             if city is not False:
                                 city_data[city] += 1
@@ -169,7 +178,7 @@ class GatherLoc:
                                 break
                             
                             else:
-                                city = self._return_city(self, loc, self.semt_dict, guess)
+                                city = self._return_city(loc, self.semt_dict, guess)
                             
                                 if city is not False:
                                 
@@ -179,7 +188,7 @@ class GatherLoc:
                                     break
 
                                 else:
-                                    city = self._return_city(self, loc, self.mah_dict, guess)
+                                    city = self._return_city(loc, self.mah_dict, guess)
                             
                                     if city is not False:
                                         
@@ -258,7 +267,7 @@ class GatherLoc:
                                 to_be_appended = tweet["user"]["id"]
                                 
                             else:
-                                city = self._return_city(self, loc, self.ilce_dict, guess)
+                                city = self._return_city(loc, self.ilce_dict, guess)
                             
                                 if city is not False:
                                     
@@ -267,7 +276,7 @@ class GatherLoc:
                                     to_be_appended = tweet["user"]["id"]
                                 
                                 else:
-                                    city = self._return_city(self, loc, self.semt_dict, guess)
+                                    city = self._return_city(loc, self.semt_dict, guess)
                             
                                     if city is not False:
                                         
@@ -277,7 +286,7 @@ class GatherLoc:
                                         
 
                                     else:
-                                        city = self._return_city(self, loc, self.mah_dict, guess)
+                                        city = self._return_city(loc, self.mah_dict, guess)
                             
                                         if city is not False:
                                             

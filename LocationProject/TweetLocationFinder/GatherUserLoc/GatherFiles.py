@@ -31,17 +31,18 @@ class GatherFiles:
         return
 
     # Returns a list with all city names, writes into a JSON file with all cities as keys and all their values to 0
-    def city_list_and_data(self, citypathTXT, datapathJSON):
+    def city_list_and_data(self, citypathTXT, datapathJSON = None):
         cityList = []
         with open(citypathTXT, "r", encoding = "utf-8") as file:
             for line in file:
                 line = unidecode(line)
                 line = line.strip().lower()
                 cityList.append(line)
-
-        data_dict = {key: 0 for key in cityList}
-        with open(datapathJSON, 'w') as file:
-            json.dump(data_dict, file, indent=4)
+        
+        if datapathJSON is not None:
+            data_dict = {key: 0 for key in cityList}
+            with open(datapathJSON, 'w') as file:
+                json.dump(data_dict, file, indent=4)
 
         return cityList
 
