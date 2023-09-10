@@ -112,7 +112,7 @@ class GatherLoc:
         return loc
 
     # Gets the location data on the ["user"]["location"] part of the metadata
-    def get_user_loc(self, city_data, PATH, result_path_JSON, gathered_user_list_path_TXT, guess=False, **kwargs):
+    def get_user_loc(self, city_data, PATH, result_path_JSON, gathered_user_list_path_TXT = None, guess=False, **kwargs):
         
         kwargs_count = len(kwargs)
         if kwargs_count > 2:
@@ -203,13 +203,14 @@ class GatherLoc:
         with open(result_path_JSON, 'w') as file:
             json.dump(city_data, file, indent=4)
 
-        with open(gathered_user_list_path_TXT, 'w') as file:
-            for item in user_list:
-                file.write(str(item) + '\n')
+        if gathered_user_list_path_TXT is not None:
+            with open(gathered_user_list_path_TXT, 'w') as file:
+                for item in user_list:
+                    file.write(str(item) + '\n')
 
 
     # Gets the location data on the ["place"]["full_name"] part of the metadata
-    def get_tweet_loc(self, city_data, PATH, result_path_JSON, gathered_user_list_path_TXT, guess=False, **kwargs):
+    def get_tweet_loc(self, city_data, PATH, result_path_JSON, gathered_user_list_path_TXT = None, guess=False, **kwargs):
         user_place_id = []
         
         kwargs_count = len(kwargs)
@@ -308,12 +309,14 @@ class GatherLoc:
         with open(result_path_JSON, 'w') as file:
             json.dump(city_data, file, indent=4)
 
-        with open(gathered_user_list_path_TXT, 'w') as file:
-            for item in user_place_id:
-                file.write(str(item) + '\n')
+        
+        if gathered_user_list_path_TXT is not None:
+            with open(gathered_user_list_path_TXT, 'w') as file:
+                for item in user_place_id:
+                    file.write(str(item) + '\n')
 
     # Gets the location data on the ["geo"] part of the metadata
-    def get_tweet_coord(self, city_data, PATH, turkey_geoJSON_path, result_path_JSON, gathered_user_list_path_TXT, **kwargs): 
+    def get_tweet_coord(self, city_data, PATH, turkey_geoJSON_path, result_path_JSON, gathered_user_list_path_TXT = None, **kwargs): 
         user_geo_id = []
 
         df = gpd.read_file(turkey_geoJSON_path)
@@ -394,7 +397,8 @@ class GatherLoc:
         with open(result_path_JSON, 'w') as file:
             json.dump(city_data, file, indent=4)
 
-        with open(gathered_user_list_path_TXT, 'w') as file:
-            for item in user_geo_id:
-                file.write(str(item) + '\n')
+        if gathered_user_list_path_TXT is not None:
+            with open(gathered_user_list_path_TXT, 'w') as file:
+                for item in user_geo_id:
+                    file.write(str(item) + '\n')
 

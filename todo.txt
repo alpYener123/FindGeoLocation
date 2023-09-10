@@ -1,6 +1,8 @@
 1) Format:    
     AFTER ALL:
         - run all the stuff once again, be sure they work. Also, get all the data you can (do it in an example ipynb for all packages)
+            - get all 3 with cumulation, with txt lists, both guess and not guess
+            - get all 3 individually, both guess and not guess
         - if the data is ok, gather the graphs accordingly
         - update readme
 
