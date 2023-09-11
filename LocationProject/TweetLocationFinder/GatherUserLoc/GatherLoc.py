@@ -4,6 +4,7 @@ from tqdm import tqdm
 from unidecode import unidecode
 from shapely.geometry import Point
 import geopandas as gpd
+import os
 
 class GatherLoc:
 
@@ -13,6 +14,20 @@ class GatherLoc:
         if populationPATH is not None:
             self.populations = self._get_populations(populationPATH)
         self.cityList = city_list
+
+    def _is_valid_read_path(self, path):
+        # Check if the path exists and is readable
+        return os.path.exists(path) and os.access(path, os.R_OK)
+
+    def _is_valid_write_path(self, path):
+        # Check if the path is writable (create a temporary file)
+        try:
+            with open(path, 'w'):
+                pass
+            os.remove(path)  # Remove the temporary file
+            return True
+        except (PermissionError, FileNotFoundError):
+            return False
 
     # Will be used if guess=True
     # Guesses which city the user is according to the city population
@@ -112,6 +127,13 @@ class GatherLoc:
 
     # Gets the location data on the ["user"]["location"] part of the metadata
     def get_user_loc(self, city_data, PATH, result_path_JSON, gathered_user_list_path_TXT = None, guess=False, **kwargs):
+
+        if self._is_valid_write_path(result_path_JSON) is False:
+            print("JSON result path to be written on does not exist")
+            return
+        if self._is_valid_write_path(gathered_user_list_path_TXT) is False:
+            print("txt result path to be written on does not exist")
+            return
         
         kwargs_count = len(kwargs)
         if kwargs_count > 2:
