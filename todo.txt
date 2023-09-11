@@ -1,7 +1,6 @@
 1) Format:    
     AFTER ALL:
         - gather the graphs accordingly (name all stuff neatly)
-        - add to the functions this: if the paths given are correct paths. If not, exit from the function
 
 2) Bak bölgesel rekabet gücünü nasıl belirlemişler alınan para veya teknolojik gelişim ile ilgiliyse güzel olur
 http://160.75.25.161/index.php/itudergisi_a/article/viewFile/1060/1009
