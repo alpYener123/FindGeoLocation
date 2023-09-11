@@ -7,7 +7,7 @@ class GatherFiles:
     def __init__(self):
         self.ilce_dict = {}
         self.semt_dict = {}
-        self.mah_dict = {}
+        #self.mah_dict = {}
 
     # An excel with with il, ilçe, semt, mahalle information for each row, for each mahalle
     def city_parts(self, pathXLSX):
@@ -18,15 +18,18 @@ class GatherFiles:
             sub_key = unidecode(row['ilçe'].strip().lower())
             sub_sub_key = unidecode(row['semt_bucak_belde'].strip().lower())
 
-            value = (unidecode(row["Mahalle"].strip().lower())) # Exlude MAH + things like "X MAH (A KÖYÜ)"
+            '''value = (unidecode(row["Mahalle"].strip().lower())) # Exlude MAH + things like "X MAH (A KÖYÜ)"
             idx = value.find("(")
             if idx > -1:
                 value = value[:idx]
-            value = value[:-4]
+                value = value[:-1]
+                if value[:-1] == " ":
+                    value = value[:-1]
+            value = value[:-4]'''
 
             self.ilce_dict.setdefault(main_key, {}).setdefault(sub_key, 0)
             self.semt_dict.setdefault(main_key, {}).setdefault(sub_sub_key, 0)
-            self.mah_dict.setdefault(main_key, {}).setdefault(value, 0)
+            '''self.mah_dict.setdefault(main_key, {}).setdefault(value, 0)'''
         
         return
 

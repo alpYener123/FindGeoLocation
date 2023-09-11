@@ -10,7 +10,7 @@ class GatherLoc:
     def __init__(self, city_list, files, populationPATH = None):
         self.ilce_dict = files.ilce_dict
         self.semt_dict = files.semt_dict
-        self.mah_dict = files.mah_dict
+        #self.mah_dict = files.mah_dict
         if populationPATH is not None:
             self.populations = self._get_populations(populationPATH)
         self.cityList = city_list
@@ -37,19 +37,26 @@ class GatherLoc:
             populations = json.load(file)
         return populations
 
-    # Returns a string of cities according to the string "st"
+    '''# Returns a string of cities according to the string "st"
     def _recursive_search(self, sub_dict, st, cities, city=""):
         for key, value in sub_dict.items():
             if isinstance(value, dict):
-                cities = self._recursive_search(value, st, cities, key)
-            elif key in st and city not in cities:
+                cities = self._recursive_search(value, st, cities, city=key)
+            elif key == st and city not in cities:
                 cities+=(city+",")
-        return cities
+        return cities'''
+    
+    def _city_search(self, dct, target_string, common):
+        for key, value in dct.items():
+            if target_string in value:
+                if key not in common:
+                    common += (key+",")
+        return common
 
     # Returns a list of cities
     def _find_cities(self, dct, target_string):
         common = ""
-        common = self._recursive_search(dct, target_string, common)
+        common = self._city_search(dct, target_string, common)
         if len(common) > 0:
             common = common[:-1]
             common = common.split(",")
@@ -59,6 +66,7 @@ class GatherLoc:
     def _return_city(self, loc, dic, guess_bool):
         common_elements = []
 
+       
         for item in loc:
             l = self._find_cities(dic, item)
             if isinstance(l, list):
@@ -104,6 +112,8 @@ class GatherLoc:
             loc = loc.split("/")
         elif "," in loc:
             loc = loc.split(",")
+        elif "-" in loc:
+            loc = loc.split("-")
         else:
             loc = loc.split(" ")
         loc = [element.replace(" ", "") for element in loc]
@@ -112,6 +122,8 @@ class GatherLoc:
 
     # Gets the location data on the ["user"]["location"] part of the metadata
     def get_user_loc(self, city_data, PATH, result_path_JSON, gathered_user_list_path_TXT = None, guess=False, **kwargs):
+
+        mah = 0
         
         kwargs_count = len(kwargs)
         if kwargs_count > 2:
@@ -186,15 +198,18 @@ class GatherLoc:
                                     user_list.append(tweet["user"]["id"])
                                     break
 
-                                else:
-                                    city = self._return_city(loc, self.mah_dict, guess)
+                                #else:
+                                    #mah_str = (unidecode(tweet["user"]["location"].strip())).lower() ###################3
+                                    '''city = self._return_city(mah_str, self.mah_dict, guess)
                             
                                     if city is not False:
                                         
                                         city_data[city] += 1
                                         memberCNT += 1
                                         user_list.append(tweet["user"]["id"])
-                                        break
+                                        mah +=1
+                                        print("mah = " , mah , " city: " , city , " content: ", loc)
+                                        break'''
                     
                 cnt += 1
                 pbar.set_postfix({"Count": cnt, "Successful Count": memberCNT , "List1 idx": a, "List2 idx":b })
@@ -256,7 +271,7 @@ class GatherLoc:
 
                     else:
                         if tweet["place"] is not None:
-                            loc = self._lower_unidecode(tweet["user"]["location"])
+                            loc = self._lower_unidecode(tweet["place"]["full_name"])
 
 
                             common_elements = set(loc).intersection(self.cityList)
@@ -285,14 +300,14 @@ class GatherLoc:
                                         to_be_appended = tweet["user"]["id"]
                                         
 
-                                    else:
+                                    '''else:
                                         city = self._return_city(loc, self.mah_dict, guess)
                             
                                         if city is not False:
                                             
                                             user_dict[city] += 1
                                             went_in = True
-                                            to_be_appended = tweet["user"]["id"]
+                                            to_be_appended = tweet["user"]["id"]'''
 
 
                 if went_in:           
