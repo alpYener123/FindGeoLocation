@@ -4,9 +4,10 @@
             - get all 3 with cumulation, with txt lists not guess
             - get all 3 individually not guess
         - if the data is ok, gather the graphs accordingly (name all stuff neatly)
-        - name the files better
+        - add to the functions this: if the paths given are correct paths. If not, exit from the function
+        - name the files better and delete the ones needed to be deleted
         - renew the comments and delete mah_dict etc
-        - update readme, explain accumulation meaning etc
+        - update readme, explain accumulation meaning etc and write down the data found
 
 2) Bak bölgesel rekabet gücünü nasıl belirlemişler alınan para veya teknolojik gelişim ile ilgiliyse güzel olur
 http://160.75.25.161/index.php/itudergisi_a/article/viewFile/1060/1009
