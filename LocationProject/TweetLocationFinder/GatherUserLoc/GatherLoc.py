@@ -10,12 +10,11 @@ class GatherLoc:
     def __init__(self, city_list, files, populationPATH = None):
         self.ilce_dict = files.ilce_dict
         self.semt_dict = files.semt_dict
-        #self.mah_dict = files.mah_dict
         if populationPATH is not None:
             self.populations = self._get_populations(populationPATH)
         self.cityList = city_list
 
-    # Will be used guess is used
+    # Will be used if guess=True
     # Guesses which city the user is according to the city population
     def _guess(self, l):
         final = 0
@@ -29,7 +28,7 @@ class GatherLoc:
         city = self.cityList[final_idx]
         return city
 
-    # Will be used if guess is used
+    # Will be used if guess=True
     # A getter function for populations
     @staticmethod
     def _get_populations(pathJSON):
@@ -37,15 +36,6 @@ class GatherLoc:
             populations = json.load(file)
         return populations
 
-    '''# Returns a string of cities according to the string "st"
-    def _recursive_search(self, sub_dict, st, cities, city=""):
-        for key, value in sub_dict.items():
-            if isinstance(value, dict):
-                cities = self._recursive_search(value, st, cities, city=key)
-            elif key == st and city not in cities:
-                cities+=(city+",")
-        return cities'''
-    
     def _city_search(self, dct, target_string, common):
         for key, value in dct.items():
             if target_string in value:
@@ -122,8 +112,6 @@ class GatherLoc:
 
     # Gets the location data on the ["user"]["location"] part of the metadata
     def get_user_loc(self, city_data, PATH, result_path_JSON, gathered_user_list_path_TXT = None, guess=False, **kwargs):
-
-        #mah = 0
         
         kwargs_count = len(kwargs)
         if kwargs_count > 2:
@@ -197,19 +185,6 @@ class GatherLoc:
                                     memberCNT += 1
                                     user_list.append(tweet["user"]["id"])
                                     break
-
-                                #else:
-                                    #mah_str = (unidecode(tweet["user"]["location"].strip())).lower() ###################3
-                                    '''city = self._return_city(mah_str, self.mah_dict, guess)
-                            
-                                    if city is not False:
-                                        
-                                        city_data[city] += 1
-                                        memberCNT += 1
-                                        user_list.append(tweet["user"]["id"])
-                                        mah +=1
-                                        print("mah = " , mah , " city: " , city , " content: ", loc)
-                                        break'''
                     
                 cnt += 1
                 pbar.set_postfix({"Count": cnt, "Successful Count": memberCNT , "List1 idx": a, "List2 idx":b })
@@ -300,14 +275,7 @@ class GatherLoc:
                                         to_be_appended = tweet["user"]["id"]
                                         
 
-                                    '''else:
-                                        city = self._return_city(loc, self.mah_dict, guess)
-                            
-                                        if city is not False:
-                                            
-                                            user_dict[city] += 1
-                                            went_in = True
-                                            to_be_appended = tweet["user"]["id"]'''
+                                    
 
 
                 if went_in:           
@@ -416,3 +384,40 @@ class GatherLoc:
                 for item in user_geo_id:
                     file.write(str(item) + '\n')
 
+
+
+'''
+TRASH BIN:
+#self.mah_dict = files.mah_dict
+
+     Returns a string of cities according to the string "st"
+    def _recursive_search(self, sub_dict, st, cities, city=""):
+        for key, value in sub_dict.items():
+            if isinstance(value, dict):
+                cities = self._recursive_search(value, st, cities, city=key)
+            elif key == st and city not in cities:
+                cities+=(city+",")
+        return cities
+
+#else:
+-#mah_str = (unidecode(tweet["user"]["location"].strip())).lower() ###################3
+-city = self._return_city(mah_str, self.mah_dict, guess
+if city is not False:
+city_data[city] += 1
+memberCNT += 1
+user_list.append(tweet["user"]["id"])
+mah +=1
+print("mah = " , mah , " city: " , city , " content: ", loc)
+break
+
+else:
+city = self._return_city(loc, self.mah_dict, guess)
+
+if city is not False:
+
+user_dict[city] += 1
+went_in = True
+to_be_appended = tweet["user"]["id"]
+
+
+'''

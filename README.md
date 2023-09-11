@@ -20,7 +20,7 @@ Finds city-level locations of tweets that were collected via Twitter API v1.
 
 ```graphs``` --> the graphs of the data gathered
 
-'''```.ipynb``` --> forming those graphs
+```extracting_graphs.ipynb``` --> forming those graphs
 
 ## NUMERICAL DATA:
 
