@@ -123,7 +123,7 @@ class GatherLoc:
     # Gets the location data on the ["user"]["location"] part of the metadata
     def get_user_loc(self, city_data, PATH, result_path_JSON, gathered_user_list_path_TXT = None, guess=False, **kwargs):
 
-        mah = 0
+        #mah = 0
         
         kwargs_count = len(kwargs)
         if kwargs_count > 2:
