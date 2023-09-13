@@ -4,17 +4,33 @@ from tqdm import tqdm
 from unidecode import unidecode
 from shapely.geometry import Point
 import geopandas as gpd
+import os
 
 class GatherLoc:
 
-    def __init__(self, city_list, ilce_dict, semt_dict, mah_dict, populationPATH = None):
-        self.ilce_dict = ilce_dict
-        self.semt_dict = semt_dict
-        self.mah_dict = mah_dict
+    def __init__(self, city_list, files, populationPATH = None):
+        self.ilce_dict = files.ilce_dict
+        self.semt_dict = files.semt_dict
         if populationPATH is not None:
             self.populations = self._get_populations(populationPATH)
         self.cityList = city_list
 
+    def _is_valid_read_path(self, path):
+        # Check if the path exists and is readable
+        return os.path.exists(path) and os.access(path, os.R_OK)
+
+    def _is_valid_write_path(self, path):
+        # Check if the path is writable (create a temporary file)
+        try:
+            with open(path, 'w'):
+                pass
+            os.remove(path)  # Remove the temporary file
+            return True
+        except (PermissionError, FileNotFoundError):
+            return False
+
+    # Will be used if guess=True
+    # Guesses which city the user is according to the city population
     def _guess(self, l):
         final = 0
         final_idx = -1
@@ -27,32 +43,35 @@ class GatherLoc:
         city = self.cityList[final_idx]
         return city
 
+    # Will be used if guess=True
+    # A getter function for populations
     @staticmethod
     def _get_populations(pathJSON):
         with open(pathJSON, "r", encoding="utf-8") as file:
             populations = json.load(file)
         return populations
 
-    def _recursive_search(self, sub_dict, st, cities, city=""):
-        for key, value in sub_dict.items():
-            if isinstance(value, dict):
-                cities = self._recursive_search(self, value, st, cities, key)
-            elif key in st and city not in cities:
-                cities+=(city+",")
-        return cities
+    def _city_search(self, dct, target_string, common):
+        for key, value in dct.items():
+            if target_string in value:
+                if key not in common:
+                    common += (key+",")
+        return common
 
-    @staticmethod
+    # Returns a list of cities
     def _find_cities(self, dct, target_string):
         common = ""
-        common = self._recursive_search(self, dct, target_string, common)
+        common = self._city_search(dct, target_string, common)
         if len(common) > 0:
             common = common[:-1]
             common = common.split(",")
         return common
 
+    # With the city list, returns the city (if needed, guess is used here)
     def _return_city(self, loc, dic, guess_bool):
         common_elements = []
 
+       
         for item in loc:
             l = self._find_cities(dic, item)
             if isinstance(l, list):
@@ -61,7 +80,7 @@ class GatherLoc:
         if guess_bool is True:
             if len(common_elements) > 0:
                 if len(common_elements) > 1:
-                    city = self._guess(self, common_elements)
+                    city = self._guess(common_elements)
                 else:
                     city = common_elements[0]
                 
@@ -77,6 +96,7 @@ class GatherLoc:
             else:
                 return False
 
+    # If there are kwargs in the main gatherloc functions
     @staticmethod
     def _process_kwargs(**kwargs):
         return_list = []
@@ -88,6 +108,7 @@ class GatherLoc:
                 return False
         return return_list
 
+    # Styling up the tweet location
     @staticmethod
     def _lower_unidecode(tweet):
         loc = unidecode(tweet.strip())
@@ -96,6 +117,8 @@ class GatherLoc:
             loc = loc.split("/")
         elif "," in loc:
             loc = loc.split(",")
+        elif "-" in loc:
+            loc = loc.split("-")
         else:
             loc = loc.split(" ")
         loc = [element.replace(" ", "") for element in loc]
@@ -103,7 +126,14 @@ class GatherLoc:
         return loc
 
     # Gets the location data on the ["user"]["location"] part of the metadata
-    def get_user_loc(self, city_data, PATH, result_path_JSON, gathered_user_list_path_TXT, guess=False, **kwargs):
+    def get_user_loc(self, city_data, PATH, result_path_JSON, gathered_user_list_path_TXT = None, guess=False, **kwargs):
+
+        if self._is_valid_write_path(result_path_JSON) is False:
+            print("JSON result path to be written on does not exist")
+            return
+        if self._is_valid_write_path(gathered_user_list_path_TXT) is False:
+            print("txt result path to be written on does not exist")
+            return
         
         kwargs_count = len(kwargs)
         if kwargs_count > 2:
@@ -160,7 +190,7 @@ class GatherLoc:
                             break                                                          
                         
                         else:
-                            city = self._return_city(self, loc, self.ilce_dict, guess)
+                            city = self._return_city(loc, self.ilce_dict, guess)
                             
                             if city is not False:
                                 city_data[city] += 1
@@ -169,7 +199,7 @@ class GatherLoc:
                                 break
                             
                             else:
-                                city = self._return_city(self, loc, self.semt_dict, guess)
+                                city = self._return_city(loc, self.semt_dict, guess)
                             
                                 if city is not False:
                                 
@@ -177,16 +207,6 @@ class GatherLoc:
                                     memberCNT += 1
                                     user_list.append(tweet["user"]["id"])
                                     break
-
-                                else:
-                                    city = self._return_city(self, loc, self.mah_dict, guess)
-                            
-                                    if city is not False:
-                                        
-                                        city_data[city] += 1
-                                        memberCNT += 1
-                                        user_list.append(tweet["user"]["id"])
-                                        break
                     
                 cnt += 1
                 pbar.set_postfix({"Count": cnt, "Successful Count": memberCNT , "List1 idx": a, "List2 idx":b })
@@ -194,13 +214,14 @@ class GatherLoc:
         with open(result_path_JSON, 'w') as file:
             json.dump(city_data, file, indent=4)
 
-        with open(gathered_user_list_path_TXT, 'w') as file:
-            for item in user_list:
-                file.write(str(item) + '\n')
+        if gathered_user_list_path_TXT is not None:
+            with open(gathered_user_list_path_TXT, 'w') as file:
+                for item in user_list:
+                    file.write(str(item) + '\n')
 
 
     # Gets the location data on the ["place"]["full_name"] part of the metadata
-    def get_tweet_loc(self, city_data, PATH, result_path_JSON, gathered_user_list_path_TXT, guess=False, **kwargs):
+    def get_tweet_loc(self, city_data, PATH, result_path_JSON, gathered_user_list_path_TXT = None, guess=False, **kwargs):
         user_place_id = []
         
         kwargs_count = len(kwargs)
@@ -247,7 +268,7 @@ class GatherLoc:
 
                     else:
                         if tweet["place"] is not None:
-                            loc = self._lower_unidecode(tweet["user"]["location"])
+                            loc = self._lower_unidecode(tweet["place"]["full_name"])
 
 
                             common_elements = set(loc).intersection(self.cityList)
@@ -258,7 +279,7 @@ class GatherLoc:
                                 to_be_appended = tweet["user"]["id"]
                                 
                             else:
-                                city = self._return_city(self, loc, self.ilce_dict, guess)
+                                city = self._return_city(loc, self.ilce_dict, guess)
                             
                                 if city is not False:
                                     
@@ -267,7 +288,7 @@ class GatherLoc:
                                     to_be_appended = tweet["user"]["id"]
                                 
                                 else:
-                                    city = self._return_city(self, loc, self.semt_dict, guess)
+                                    city = self._return_city(loc, self.semt_dict, guess)
                             
                                     if city is not False:
                                         
@@ -276,14 +297,7 @@ class GatherLoc:
                                         to_be_appended = tweet["user"]["id"]
                                         
 
-                                    else:
-                                        city = self._return_city(self, loc, self.mah_dict, guess)
-                            
-                                        if city is not False:
-                                            
-                                            user_dict[city] += 1
-                                            went_in = True
-                                            to_be_appended = tweet["user"]["id"]
+                                    
 
 
                 if went_in:           
@@ -299,12 +313,14 @@ class GatherLoc:
         with open(result_path_JSON, 'w') as file:
             json.dump(city_data, file, indent=4)
 
-        with open(gathered_user_list_path_TXT, 'w') as file:
-            for item in user_place_id:
-                file.write(str(item) + '\n')
+        
+        if gathered_user_list_path_TXT is not None:
+            with open(gathered_user_list_path_TXT, 'w') as file:
+                for item in user_place_id:
+                    file.write(str(item) + '\n')
 
     # Gets the location data on the ["geo"] part of the metadata
-    def get_tweet_coord(self, city_data, PATH, turkey_geoJSON_path, result_path_JSON, gathered_user_list_path_TXT, **kwargs): 
+    def get_tweet_coord(self, city_data, PATH, turkey_geoJSON_path, result_path_JSON, gathered_user_list_path_TXT = None, **kwargs): 
         user_geo_id = []
 
         df = gpd.read_file(turkey_geoJSON_path)
@@ -385,7 +401,45 @@ class GatherLoc:
         with open(result_path_JSON, 'w') as file:
             json.dump(city_data, file, indent=4)
 
-        with open(gathered_user_list_path_TXT, 'w') as file:
-            for item in user_geo_id:
-                file.write(str(item) + '\n')
+        if gathered_user_list_path_TXT is not None:
+            with open(gathered_user_list_path_TXT, 'w') as file:
+                for item in user_geo_id:
+                    file.write(str(item) + '\n')
 
+
+
+'''
+TRASH BIN:
+#self.mah_dict = files.mah_dict
+
+     Returns a string of cities according to the string "st"
+    def _recursive_search(self, sub_dict, st, cities, city=""):
+        for key, value in sub_dict.items():
+            if isinstance(value, dict):
+                cities = self._recursive_search(value, st, cities, city=key)
+            elif key == st and city not in cities:
+                cities+=(city+",")
+        return cities
+
+#else:
+-#mah_str = (unidecode(tweet["user"]["location"].strip())).lower() ###################3
+-city = self._return_city(mah_str, self.mah_dict, guess
+if city is not False:
+city_data[city] += 1
+memberCNT += 1
+user_list.append(tweet["user"]["id"])
+mah +=1
+print("mah = " , mah , " city: " , city , " content: ", loc)
+break
+
+else:
+city = self._return_city(loc, self.mah_dict, guess)
+
+if city is not False:
+
+user_dict[city] += 1
+went_in = True
+to_be_appended = tweet["user"]["id"]
+
+
+'''
