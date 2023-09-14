@@ -1,29 +1,6 @@
-1) Format:    
-    AFTER ALL:
-        - gather the graphs accordingly (name all stuff neatly)
-            - have functions
-            - for all individual + finals of accumulation
-                - regular
-                - real population
-                - top 3/bottom 3 sq difference
-                - sq difference of all
-            - dir design:
-                --individual
-                    - for all 6, have seperate dirs with all the graphs there
-                --accumulation
-                    - for both guess and no guess, have dirs with all the graphs there
-                --explanation
-                    - have a readme for the graph file names + have bolgesel rekabet güc
-
 2) Bak bölgesel rekabet gücünü nasıl belirlemişler alınan para veya teknolojik gelişim ile ilgiliyse güzel olur
 http://160.75.25.161/index.php/itudergisi_a/article/viewFile/1060/1009
 Rekabet gücü kent düzeyinde ele alındığında “yaşam kalitesi” kavramının vurgulandığı görülmektedir. Yaşam kalitesini belirleyen başlıca faktörler ise istihdam
 düzeyi ve verimliliktir
 
-3) comment on the graphs and the data, what they mean what they show etc (create a readme file inside the graphs directory)
-
 4) Text Ali then Onur Hoca (Onur Hoca'dan referans da iste yaz için)
-
-
-notes:
-    - on the graphs, square difference of bottom 3 is unneeded since it would change every time
