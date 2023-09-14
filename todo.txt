@@ -23,3 +23,7 @@ düzeyi ve verimliliktir
 3) comment on the graphs and the data, what they mean what they show etc (create a readme file inside the graphs directory)
 
 4) Text Ali then Onur Hoca (Onur Hoca'dan referans da iste yaz için)
+
+
+notes:
+    - on the graphs, square difference of bottom 3 is unneeded since it would change every time
