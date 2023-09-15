@@ -1,5 +1,6 @@
 # Byte-compiled / optimized / DLL files
-**/__pycache__/
+LocationProject/TweetLocationFinder/__pycache__/
+LocationProject/TweetLocationFinder/GatherUserLoc__pycache__/
 *.py[cod]
 *$py.class
 
