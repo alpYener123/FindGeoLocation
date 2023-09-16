@@ -29,10 +29,8 @@ Districts searched:
 >>guess_accumulate = GatherLoc(city_list=city_list, files=files)
 >>guess_accumulate.get_user_loc(city_data=city_data, main_data_path=main_data_path, result_path_JSON=result_path)
 ```
-```city_parts``` fills up the empty dictionaries of ```GatherFiles``` object.
-
-```city_list_and_data``` returns a list of cities. Also saves a JSON file as all city names as keys and all values defaultly set to 0.
-
+```city_parts``` fills up the empty dictionaries of ```GatherFiles``` object.<br />
+```city_list_and_data``` returns a list of cities. Also saves a JSON file as all city names as keys and all values defaultly set to 0.<br />
 ```get_user_loc``` searches through the data and gets the user locations of users that have legitimate location info in ```[user][location]``` part of the metadata
 - Arguments:
     - ```city_data``` a dictionary with city names as keys and some integer value as values.
