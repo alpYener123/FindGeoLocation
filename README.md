@@ -2,8 +2,12 @@
 
 Finds city-level locations of tweets that were collected via Twitter API v1.
 
-3 ways to get the location: from user bio, tweet bio or tweet coordinates
+3 ways to get the location from the metadata
+- ["user"]["location"]
+- ["place"]["full_name"]
+- ["geo"]
 
+user bio:
 
 2 main ways: To guess or not to guess
 - Guess: If a person has entered a district name that is included in multiple cities, estimate that the person is from the city with the larger population
