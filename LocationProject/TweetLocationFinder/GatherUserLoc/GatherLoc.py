@@ -41,9 +41,9 @@ class GatherLoc:
         except (PermissionError, FileNotFoundError):
             return False
 
-    # Will be used if guess=True
-    # Guesses which city the user is according to the city population
     def _guess(self, l):
+        # Will be used if guess=True
+        # Guesses which city the user is according to the city population
         final = 0
         final_idx = -1
         for i in l:
@@ -55,23 +55,27 @@ class GatherLoc:
         city = self.cityList[final_idx]
         return city
 
-    # Will be used if guess=True
-    # A getter function for populations
+    
     @staticmethod
     def _get_populations(pathJSON):
+        # Will be used if population path is given when initializing
+        # A getter function for populations
         with open(pathJSON, "r", encoding="utf-8") as file:
             populations = json.load(file)
         return populations
 
     def _city_search(self, dct, target_string, common):
+        # Searches for cities, returns a string
         for key, value in dct.items():
             if target_string in value:
                 if key not in common:
                     common += (key+",")
         return common
 
-    # Returns a list of cities
+    
     def _find_cities(self, dct, target_string):
+        # Finds the cities with the string and turns it into a list
+        # Returns a list of cities
         common = ""
         common = self._city_search(dct, target_string, common)
         if len(common) > 0:
@@ -79,8 +83,8 @@ class GatherLoc:
             common = common.split(",")
         return common
 
-    # With the city list, returns the city (if needed, guess is used here)
     def _return_city(self, loc, dic, guess_bool):
+        # With the city list, returns the city (if needed, guess is used here)
         common_elements = []
 
        
@@ -108,9 +112,9 @@ class GatherLoc:
             else:
                 return False
 
-    # If there are kwargs in the main gatherloc functions
     @staticmethod
     def _process_kwargs(**kwargs):
+         # If there are kwargs in the main gatherloc functions
         return_list = []
         for key, value in kwargs.items():
             if isinstance(value, list):
@@ -120,9 +124,9 @@ class GatherLoc:
                 return False
         return return_list
 
-    # Styling up the tweet location
     @staticmethod
     def _lower_unidecode(tweet):
+        # Styling up the tweet location
         loc = unidecode(tweet.strip())
         loc = loc.lower()
         if "/" in loc:
@@ -351,7 +355,6 @@ class GatherLoc:
                 for item in user_place_id:
                     file.write(str(item) + '\n')
 
-    # Gets the location data on the ["geo"] part of the metadata
     def get_tweet_coord(self, city_data, main_data_path, turkey_geoJSON_path, result_path_JSON, user_list_path_TXT = None, **kwargs):
         '''Gets the location data on the ["geo"] part of the metadata by reverse geocoding\n
         city_data --> dictionary with city names as keys and integers as values\n

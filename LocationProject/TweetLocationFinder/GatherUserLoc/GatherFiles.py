@@ -54,7 +54,6 @@ class GatherFiles:
 
         return cityList
 
-    # To get that city data dictionary
     def get_city_data(self, path):
         '''Getter function for city data\n
         Note: city data is a json file/dictionary which has cities as keys and\n

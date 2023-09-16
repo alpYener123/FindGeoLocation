@@ -1,4 +1,0 @@
-
-WHEN PULL REQUESTING:
-- Tell Ali that you made the paths of LocationProject/trial_data.ipynb private but not the extracting_graphs.ipynb since they are relative paths.
-- Did not add docstrings to private functions
