@@ -8,7 +8,7 @@ import os
 
 class GatherLoc:
 
-    def __init__(self, city_list, files, populationPATH = None):
+    def __init__(self, city_list, files, population_path = None):
         self.ilce_dict = files.ilce_dict
         self.semt_dict = files.semt_dict
         if populationPATH is not None:

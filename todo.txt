@@ -1,7 +1,5 @@
 ALI ORDERS, ALP DOES:
 
-1) In readme.md, add straightforward instructions to use the package. Like you import the package and just call a func and show the print output. Check this repo https://github.com/carpedm20/emoji
-
 3) Add docstring for the methods and classes.
 You can see some examples here:
 https://www.programiz.com/python-programming/docstrings
