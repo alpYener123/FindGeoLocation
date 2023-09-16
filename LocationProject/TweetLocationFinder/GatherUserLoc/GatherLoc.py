@@ -21,6 +21,8 @@ class GatherLoc:
 
     def _is_valid_write_path(self, path):
         # Check if the path is writable (create a temporary file)
+        if path is None:
+            return True
         try:
             with open(path, 'w'):
                 pass
@@ -126,12 +128,12 @@ class GatherLoc:
         return loc
 
     # Gets the location data on the ["user"]["location"] part of the metadata
-    def get_user_loc(self, city_data, PATH, result_path_JSON, gathered_user_list_path_TXT = None, guess=False, **kwargs):
+    def get_user_loc(self, city_data, main_data_path, result_path_JSON, user_list_path_TXT = None, guess=False, **kwargs):
 
         if self._is_valid_write_path(result_path_JSON) is False:
             print("JSON result path to be written on does not exist")
             return
-        if self._is_valid_write_path(gathered_user_list_path_TXT) is False:
+        if self._is_valid_write_path(user_list_path_TXT) is False:
             print("txt result path to be written on does not exist")
             return
         
@@ -159,7 +161,7 @@ class GatherLoc:
         memberCNT = 0
         cnt = 0
 
-        with gzip.open(PATH, "rt") as fh:
+        with gzip.open(main_data_path, "rt") as fh:
             pbar = tqdm(fh)
             for i in pbar:
                 uid, data = i.split("\t") 
@@ -214,15 +216,22 @@ class GatherLoc:
         with open(result_path_JSON, 'w') as file:
             json.dump(city_data, file, indent=4)
 
-        if gathered_user_list_path_TXT is not None:
-            with open(gathered_user_list_path_TXT, 'w') as file:
+        if user_list_path_TXT is not None:
+            with open(user_list_path_TXT, 'w') as file:
                 for item in user_list:
                     file.write(str(item) + '\n')
 
 
     # Gets the location data on the ["place"]["full_name"] part of the metadata
-    def get_tweet_loc(self, city_data, PATH, result_path_JSON, gathered_user_list_path_TXT = None, guess=False, **kwargs):
+    def get_tweet_loc(self, city_data, main_data_path, result_path_JSON, user_list_path_TXT = None, guess=False, **kwargs):
         user_place_id = []
+
+        if self._is_valid_write_path(result_path_JSON) is False:
+            print("JSON result path to be written on does not exist")
+            return
+        if self._is_valid_write_path(user_list_path_TXT) is False:
+            print("txt result path to be written on does not exist")
+            return
         
         kwargs_count = len(kwargs)
         if kwargs_count > 2:
@@ -246,7 +255,7 @@ class GatherLoc:
 
         memberCNT = 0
         cnt = 0
-        with gzip.open(PATH, "rt") as fh:
+        with gzip.open(main_data_path, "rt") as fh:
             pbar = tqdm(fh)
             for i in pbar:
                 uid, data = i.split("\t") 
@@ -314,14 +323,21 @@ class GatherLoc:
             json.dump(city_data, file, indent=4)
 
         
-        if gathered_user_list_path_TXT is not None:
-            with open(gathered_user_list_path_TXT, 'w') as file:
+        if user_list_path_TXT is not None:
+            with open(user_list_path_TXT, 'w') as file:
                 for item in user_place_id:
                     file.write(str(item) + '\n')
 
     # Gets the location data on the ["geo"] part of the metadata
-    def get_tweet_coord(self, city_data, PATH, turkey_geoJSON_path, result_path_JSON, gathered_user_list_path_TXT = None, **kwargs): 
+    def get_tweet_coord(self, city_data, main_data_path, turkey_geoJSON_path, result_path_JSON, user_list_path_TXT = None, **kwargs): 
         user_geo_id = []
+
+        if self._is_valid_write_path(result_path_JSON) is False:
+            print("JSON result path to be written on does not exist")
+            return
+        if self._is_valid_write_path(user_list_path_TXT) is False:
+            print("txt result path to be written on does not exist")
+            return
 
         df = gpd.read_file(turkey_geoJSON_path)
 
@@ -347,7 +363,7 @@ class GatherLoc:
 
         geoCnt = 0
         cnt = 0
-        with gzip.open(PATH, "rt") as fh:
+        with gzip.open(main_data_path, "rt") as fh:
             pbar = tqdm(fh)
             for i in pbar:
                 uid, data = i.split("\t") 
@@ -401,45 +417,7 @@ class GatherLoc:
         with open(result_path_JSON, 'w') as file:
             json.dump(city_data, file, indent=4)
 
-        if gathered_user_list_path_TXT is not None:
-            with open(gathered_user_list_path_TXT, 'w') as file:
+        if user_list_path_TXT is not None:
+            with open(user_list_path_TXT, 'w') as file:
                 for item in user_geo_id:
                     file.write(str(item) + '\n')
-
-
-
-'''
-TRASH BIN:
-#self.mah_dict = files.mah_dict
-
-     Returns a string of cities according to the string "st"
-    def _recursive_search(self, sub_dict, st, cities, city=""):
-        for key, value in sub_dict.items():
-            if isinstance(value, dict):
-                cities = self._recursive_search(value, st, cities, city=key)
-            elif key == st and city not in cities:
-                cities+=(city+",")
-        return cities
-
-#else:
--#mah_str = (unidecode(tweet["user"]["location"].strip())).lower() ###################3
--city = self._return_city(mah_str, self.mah_dict, guess
-if city is not False:
-city_data[city] += 1
-memberCNT += 1
-user_list.append(tweet["user"]["id"])
-mah +=1
-print("mah = " , mah , " city: " , city , " content: ", loc)
-break
-
-else:
-city = self._return_city(loc, self.mah_dict, guess)
-
-if city is not False:
-
-user_dict[city] += 1
-went_in = True
-to_be_appended = tweet["user"]["id"]
-
-
-'''

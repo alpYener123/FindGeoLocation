@@ -1,18 +1,40 @@
 # FindGeoLocation
 
+Finds city-level locations of tweets that were collected via Twitter API v1.
+
+3 ways to get the location: from user bio, tweet bio or tweet coordinates
+
+
+2 main ways: To guess or not to guess
+- Guess: If a person has entered a district name that is included in multiple cities, estimate that the person is from the city with the larger population
+- No guess: If multiple cities are found, skip that district and search for a more specific one
+
+Districts searched:
+- City name
+- "Ilçe" name (smaller part of a city)
+- "Semt" name (smaller part of an ilçe)
+
 ## Example
 
 ```python
 >>from TweetLocationFinder import GatherFiles and GatherLoc
 >>files = GatherFiles()
 >>files.city_parts(path_excel)
->>city_list = files.city_list_and_data(city_list_path, datapathJSON=empty_data_path)
+>>city_list = files.city_list_and_data(cities_path=city_list_path, datapathJSON=empty_data_path)
 >>city_data = files.get_city_data(empty_data_path)
 # Gather the files needed to create GatherLoc object
 
->>guess_accumulate = GatherLoc(city_list, files)
->>guess_accumulate.get_user_loc(city_data, main_data_path, result_path, result_txt_path)
+>>guess_accumulate = GatherLoc(city_list=city_list, files=files)
+>>guess_accumulate.get_user_loc(city_data=city_data, PATH=main_data_path, result_path, result_txt_path)
 ```
+```city_parts``` fills up the empty dictionaries of ```GatherFiles``` object.
+```city_list_and_data``` returns a list of cities. Also saves a JSON file as all city names as keys and all values defaultly set to 0.
+```get_user_loc``` searches through the data and gets the user locations of users that have legitimate location info in ```[user][location]``` part of the metadata
+- Arguments:
+    - ```city_data``` a dictionary with city names as keys and some integer value as values.
+    - ```main_data_path``` path to the main data (that is, data collected via Twitter API v1)
+    - ```result_path```
+
 Example output of the function:
 ```
 515098it [31:21, 273.72it/s, Count=515098, Successful Count=117343, List1 idx=None, List2 idx=None]
@@ -20,13 +42,6 @@ Example output of the function:
 
 
 ## Info
-
-Finds city-level locations of tweets that were collected via Twitter API v1.
-
-3 ways to get the location: from user bio, tweet bio or tweet coordinates
-
-2 main ways: To guess or not to guess
-    - If a person has entered a district name that is included in multiple cities, estimate that the person is from the city with the larger population
 
 ```data``` --> Necessary files for the search. Can be updated/altered if needed.
 
