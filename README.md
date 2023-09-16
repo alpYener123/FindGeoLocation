@@ -2,15 +2,18 @@
 
 ## Example
 
-```
-from TweetLocationFinder import GatherFiles and GatherLoc
-files = GatherFiles()
-files.city_parts(path_excel)
-city_list = files.city_list_and_data(city_list_path, datapathJSON=empty_data_path)
-city_data = files.get_city_data(empty_data_path)
+```python
+>>from TweetLocationFinder import GatherFiles and GatherLoc
+>>files = GatherFiles()
+>>files.city_parts(path_excel)
+>>city_list = files.city_list_and_data(city_list_path, datapathJSON=empty_data_path)
+>>city_data = files.get_city_data(empty_data_path)
+# Gather the files needed to create GatherLoc object
 
-guess_accumulate = GatherLoc(city_list, files, populationPATH=pop_path)
-guess_accumulate.get_user_loc(city_data, main_data_path, result_path, result_txt_path, guess=True)
+>>guess_accumulate = GatherLoc(city_list, files)
+>>guess_accumulate.get_user_loc(city_data, main_data_path, result_path, result_txt_path)
+515098it [31:21, 273.72it/s, Count=515098, Successful Count=117343, List1 idx=None, List2 idx=None]
+# Example output of finished run
 ```
 
 
