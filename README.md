@@ -30,7 +30,7 @@ Districts searched:
 >>guess_accumulate.get_user_loc(city_data=city_data, main_data_path=main_data_path, result_path_JSON=result_path)
 ```
 ### Explanation
-```city_parts``` fills up the empty dictionaries of ```GatherFiles``` object.
+```city_parts``` fills up the empty dictionaries of ```GatherFiles``` object. These dictionaries are needed for the creation of a ```GatherLoc``` object
 - ```path_excel``` example: ```data/city_street.xlsx```
  <br />
 
@@ -73,8 +73,12 @@ More functions and their usage examples are on ```trial_data.ipynb```
 
 ## Links Used
 
-```data/city_street.xlsx``` --> https://postakodu.ptt.gov.tr/
-```data/cities.txt``` --> https://engelsizdestek.org/iller
-```data/populations.json``` --> https://gist.github.com/ozdemirburak/4821a26db048cc0972c1beee48a408de
-```data/turkey.geojson``` --> https://github.com/alpers/Turkey-Maps-GeoJSON
+```data/city_street.xlsx``` --> https://postakodu.ptt.gov.tr/ <br />
+
+```data/cities.txt``` --> https://engelsizdestek.org/iller <br />
+
+```data/populations.json``` --> https://gist.github.com/ozdemirburak/4821a26db048cc0972c1beee48a408de <br />
+
+```data/turkey.geojson``` --> https://github.com/alpers/Turkey-Maps-GeoJSON <br />
+
 ```graphs/explanation/overestimated_cities.png``` --> http://160.75.25.161/index.php/itudergisi_a/article/viewFile/1060/1009
