@@ -7,11 +7,9 @@ Finds city-level locations of tweets that were collected via Twitter API v1.
 - ["place"]["full_name"]
 - ["geo"]
 
-user bio:
-
 2 main ways: To guess or not to guess
 - Guess: If a person has entered a district name that is included in multiple cities, estimate that the person is from the city with the larger population
-- No guess: If multiple cities are found, skip that district and search for a more specific one
+- No guess: If multiple cities are found, skip that district and search for a more specific (smaller) one
 
 Districts searched:
 - City name
@@ -32,7 +30,9 @@ Districts searched:
 >>guess_accumulate.get_user_loc(city_data=city_data, main_data_path=main_data_path, result_path_JSON=result_path)
 ```
 ```city_parts``` fills up the empty dictionaries of ```GatherFiles``` object.
+
 ```city_list_and_data``` returns a list of cities. Also saves a JSON file as all city names as keys and all values defaultly set to 0.
+
 ```get_user_loc``` searches through the data and gets the user locations of users that have legitimate location info in ```[user][location]``` part of the metadata
 - Arguments:
     - ```city_data``` a dictionary with city names as keys and some integer value as values.
