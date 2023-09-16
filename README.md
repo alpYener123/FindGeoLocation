@@ -29,8 +29,14 @@ Districts searched:
 >>guess_accumulate = GatherLoc(city_list=city_list, files=files)
 >>guess_accumulate.get_user_loc(city_data=city_data, main_data_path=main_data_path, result_path_JSON=result_path)
 ```
-```city_parts``` fills up the empty dictionaries of ```GatherFiles``` object.<br />
-```city_list_and_data``` returns a list of cities. Also saves a JSON file as all city names as keys and all values defaultly set to 0.<br />
+### Explanation
+```city_parts``` fills up the empty dictionaries of ```GatherFiles``` object.
+- ```path_excel``` example: ```data/city_street.xlsx``` <br />
+```city_list_and_data``` returns a list of cities. Also saves a json file as all city names as keys and all values defaultly set to 0.
+- ```cities_path``` example: ```data/cities.txt```
+- ```datapathJSON``` a json path which the json file is written onto.
+<br />
+
 ```get_user_loc``` searches through the data and gets the user locations of users that have legitimate location info in ```[user][location]``` part of the metadata
 - Arguments:
     - ```city_data``` a dictionary with city names as keys and some integer value as values.
@@ -42,6 +48,7 @@ Example output of the function:
 515098it [31:21, 273.72it/s, Count=515098, Successful Count=117343, List1 idx=None, List2 idx=None]
 ```
 
+More functions and their usage examples are on ```trial_data.ipynb```
 
 ## Info
 
