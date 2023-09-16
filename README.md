@@ -1,5 +1,16 @@
 # FindGeoLocation
 
+## Example
+
+```
+from TweetLocationFinder import GatherFiles
+
+
+```
+
+
+## Info
+
 Finds city-level locations of tweets that were collected via Twitter API v1.
 
 3 ways to get the location: from user bio, tweet bio or tweet coordinates
@@ -22,10 +33,7 @@ Finds city-level locations of tweets that were collected via Twitter API v1.
 
 ```extracting_graphs.ipynb``` --> forming those graphs
 
-
-
-
-## Links Used :
+## Links Used
 
 ```data/city_street.xlsx``` --> https://postakodu.ptt.gov.tr/
 ```data/cities.txt``` --> https://engelsizdestek.org/iller
