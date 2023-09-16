@@ -1,10 +1,10 @@
-1) Format:    
-    AFTER ALL:
-        - gather the graphs accordingly (name all stuff neatly)
+ALI ORDERS, ALP DOES:
 
-2) Bak bölgesel rekabet gücünü nasıl belirlemişler alınan para veya teknolojik gelişim ile ilgiliyse güzel olur
-http://160.75.25.161/index.php/itudergisi_a/article/viewFile/1060/1009
-Rekabet gücü kent düzeyinde ele alındığında “yaşam kalitesi” kavramının vurgulandığı görülmektedir. Yaşam kalitesini belirleyen başlıca faktörler ise istihdam
-düzeyi ve verimliliktir
+1) In readme.md, add straightforward instructions to use the package. Like you import the package and just call a func and show the print output. Check this repo https://github.com/carpedm20/emoji
 
-3) Text Ali then Onur Hoca
+2) Remove the paths in codes like on-drive paths, and avoid hard coding. To learn about clean coding and general coding, check Uncle Bob's Book. http://cleancoder.com/products
+
+3) Add docstring for the methods and classes.
+You can see some examples here:
+https://www.programiz.com/python-programming/docstrings
+

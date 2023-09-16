@@ -45,3 +45,12 @@ With the first method alone, 116 814 users' location info was gathered.
 With the second method alone, 47 993 users' location info was gathered.
 
 The third method has no guess feature since it is again 22 050 users.
+
+
+## Links Used :
+
+```data/city_street.xlsx``` --> https://postakodu.ptt.gov.tr/
+```data/cities.txt``` --> https://engelsizdestek.org/iller
+```data/populations.json``` --> https://gist.github.com/ozdemirburak/4821a26db048cc0972c1beee48a408de
+```data/turkey.geojson``` --> https://github.com/alpers/Turkey-Maps-GeoJSON
+```graphs/explanation/overestimated_cities.png``` --> http://160.75.25.161/index.php/itudergisi_a/article/viewFile/1060/1009
