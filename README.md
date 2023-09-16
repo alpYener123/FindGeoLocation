@@ -25,7 +25,7 @@ Districts searched:
 # Gather the files needed to create GatherLoc object
 
 >>guess_accumulate = GatherLoc(city_list=city_list, files=files)
->>guess_accumulate.get_user_loc(city_data=city_data, PATH=main_data_path, result_path, result_txt_path)
+>>guess_accumulate.get_user_loc(city_data=city_data, main_data_path=main_data_path, result_path_JSON=result_path)
 ```
 ```city_parts``` fills up the empty dictionaries of ```GatherFiles``` object.
 ```city_list_and_data``` returns a list of cities. Also saves a JSON file as all city names as keys and all values defaultly set to 0.
@@ -33,7 +33,7 @@ Districts searched:
 - Arguments:
     - ```city_data``` a dictionary with city names as keys and some integer value as values.
     - ```main_data_path``` path to the main data (that is, data collected via Twitter API v1)
-    - ```result_path```
+    - ```result_path_JSON``` path which the end result of city_data will be written to. Must be JSON format
 
 Example output of the function:
 ```
