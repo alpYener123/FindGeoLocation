@@ -2,6 +2,8 @@
 
 Finds city-level locations of tweets that were collected via Twitter API v1.
 
+Works for Turkish cities only.
+
 3 ways to get the location from the metadata
 - ["user"]["location"]
 - ["place"]["full_name"]

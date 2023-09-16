@@ -8,24 +8,27 @@ from transformers import AutoTokenizer, AutoModelForTokenClassification
 from transformers import pipeline
 
 class EntityExtractor:
+    '''Extracts the location entities on the given sentence via language models.\n
+    Then, finds (if there is) a corresponding city and displays it.'''
 
     def __init__(self, tweet):
+        '''Tweet --> a string, which (hopefully) has location entites'''
         self.nlp = spacy.load('en_core_web_lg') # english language model
         self.tokenizer = AutoTokenizer.from_pretrained("busecarik/bert-loodos-sunlp-ner-turkish") # turkish language model
         self.model = AutoModelForTokenClassification.from_pretrained("busecarik/bert-loodos-sunlp-ner-turkish")
         self.clf = pipeline("ner", model=self.model, tokenizer=self.tokenizer)
         self.tweet = tweet # the sentence that is to be processed
 
-
-    # detects the language and returns it
     def detect_lang(self):
+        '''Detects the language and returns it'''
         lang = detect(self.tweet)
         print("Language of the text:", lang)
         return lang
 
     # returns a list of location entities in the sentence
     def give_loc_ents(self, lang):
-
+        '''Returns a list of location entities in the sentence\n
+        lang --> language of the sentence'''
         return_list = []
         if lang == "en":
             doc = self.nlp(self.tweet)
@@ -111,6 +114,11 @@ class EntityExtractor:
 
     # prints the cities the given sentence may have mentioned by linking the districts and streets to the city itself
     def show_cities(self, city_list, idct, sdic, mdic, list):
+        '''According to the list of entities gathered by give_loc_ents,\n
+        Searches for corresponding cities\n
+        city_list --> can be gathered via class GatherFiles\n
+        idct, sdic, mdic --> the 3 dictionaries that are created with function city_parts on the class GatherFiles\n
+        list --> list of entities'''
         ok = False
         for item in list:
             for city in city_list:
@@ -132,60 +140,3 @@ class EntityExtractor:
                         else:
                             print("No corresponding city has found for entity", item,". :(")
             ok = False
-
-
-
-# DELETE THE BELOW PART
-    
-    '''if nlp[i]["entity"] == "B-ORGANIZATION":
-                    add = ""           
-                    word = nlp[i]["word"].replace("#", "")
-                    for item in word_list:
-                        if word in item:
-                            if item not in return_list:
-                                add += (item + " ")
-                    if i < (len(nlp)-1):
-                        d = i+1
-                        while nlp[d]["entity"] == "I-ORGANIZATION":
-                            word = nlp[d]["word"].replace("#", "")
-                            for item in word_list:
-                                if word in item:
-                                    if item not in return_list and item not in add:
-                                        add += (item + " ")
-                            if d < (len(nlp)-1):
-                                d = d+1
-                            else:
-                                break
-                    return_list.append(add[:-1])
-    
-    
-    def _is_substring_in_nested_dict(self, dct, target_string, check=False, city = ""):
-
-        for key, value in dct.items():
-            if isinstance(value, dict):
-                result = self._is_substring_in_nested_dict(value, target_string, check=True, city = key)
-                if result is not False:
-                    return result
-            elif isinstance(key, str) and key in target_string and check:
-                return city
-        return False
-    
-    def find_cities(self, city_list, ilce_dict, semt_dict, mah_dict, list):
-        for item in list:
-            if item in city_list:
-                print("Entity ", item, " is a city.")
-            else:
-                ilce = self._is_substring_in_nested_dict(ilce_dict, item)
-                if ilce != False:
-                    print("Entity ", item, " is in city ", ilce)
-
-                else:
-                    semt = self._is_substring_in_nested_dict(semt_dict, item)
-                    if semt != False:
-                        print("Entity ", item, " is in city ", semt)
-                    else:
-                        mah = self._is_substring_in_nested_dict(mah_dict, item)
-                        if mah != False:
-                            print("Entity ", item, " is in city ", mah)
-                        else:
-                            print("Could not find a corresponding city for ", item)'''

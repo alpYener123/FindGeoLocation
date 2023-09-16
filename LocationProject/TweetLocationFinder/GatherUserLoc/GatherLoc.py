@@ -7,12 +7,22 @@ import geopandas as gpd
 import os
 
 class GatherLoc:
+    '''Gathers locations of twitter users\n
+    Data has to be collected via Twitter API v1\n
+    3 main methods to obtain 3 different possible location information in the metadata\n
+    get_user_loc --> Gets the location data on the ["user"]["location"] part of the metadata\n
+    get_tweet_loc --> Gets the location data on the ["place"]["full_name"] part of the metadata\n
+    get_tweet_coord --> Gets the location data on the ["geo"] part of the metadata by reverse geocoding\n
+    '''
+
 
     def __init__(self, city_list, files, population_path = None):
+        '''IMPORTANT: if guess feature is going to be used, population_path cannot be None\n
+        Example population_path file is on Github'''
         self.ilce_dict = files.ilce_dict
         self.semt_dict = files.semt_dict
-        if populationPATH is not None:
-            self.populations = self._get_populations(populationPATH)
+        if population_path is not None:
+            self.populations = self._get_populations(population_path)
         self.cityList = city_list
 
     def _is_valid_read_path(self, path):
@@ -127,8 +137,14 @@ class GatherLoc:
 
         return loc
 
-    # Gets the location data on the ["user"]["location"] part of the metadata
     def get_user_loc(self, city_data, main_data_path, result_path_JSON, user_list_path_TXT = None, guess=False, **kwargs):
+        '''Gets the location data on the ["user"]["location"] part of the metadata\n
+        city_data --> dictionary with city names as keys and integers as values\n
+        main_data_path --> path to data collected via Twitter API v1\n
+        result_path_JSON --> json path where the updated version of city_data will be saved\n
+        user_list_path_TXT --> path where the users' id's who have been found via this method is saved\n
+        guess --> if 2 or more cities are possible, take the one with the highest population
+        kwargs --> user lists, if there is any. The method will skip the users with the id's in these lists.'''
 
         if self._is_valid_write_path(result_path_JSON) is False:
             print("JSON result path to be written on does not exist")
@@ -222,8 +238,15 @@ class GatherLoc:
                     file.write(str(item) + '\n')
 
 
-    # Gets the location data on the ["place"]["full_name"] part of the metadata
     def get_tweet_loc(self, city_data, main_data_path, result_path_JSON, user_list_path_TXT = None, guess=False, **kwargs):
+        '''Gets the location data on the ["place"]["full_name"] part of the metadata\n
+        city_data --> dictionary with city names as keys and integers as values\n
+        main_data_path --> path to data collected via Twitter API v1\n
+        result_path_JSON --> json path where the updated version of city_data will be saved\n
+        user_list_path_TXT --> path where the users' id's who have been found via this method is saved\n
+        guess --> if 2 or more cities are possible, take the one with the highest population
+        kwargs --> user lists, if there is any. The method will skip the users with the id's in these lists.'''
+
         user_place_id = []
 
         if self._is_valid_write_path(result_path_JSON) is False:
@@ -329,7 +352,15 @@ class GatherLoc:
                     file.write(str(item) + '\n')
 
     # Gets the location data on the ["geo"] part of the metadata
-    def get_tweet_coord(self, city_data, main_data_path, turkey_geoJSON_path, result_path_JSON, user_list_path_TXT = None, **kwargs): 
+    def get_tweet_coord(self, city_data, main_data_path, turkey_geoJSON_path, result_path_JSON, user_list_path_TXT = None, **kwargs):
+        '''Gets the location data on the ["geo"] part of the metadata by reverse geocoding\n
+        city_data --> dictionary with city names as keys and integers as values\n
+        main_data_path --> path to data collected via Twitter API v1\n
+        turkey_geoJSON_path --> geojson file of Turkey, needs to be detailed. Example on Github\n
+        result_path_JSON --> json path where the updated version of city_data will be saved\n
+        user_list_path_TXT --> path where the users' id's who have been found via this method is saved\n
+        kwargs --> user lists, if there is any. The method will skip the users with the id's in these lists.'''
+
         user_geo_id = []
 
         if self._is_valid_write_path(result_path_JSON) is False:

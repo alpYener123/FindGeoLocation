@@ -1,8 +1,4 @@
-ALI ORDERS, ALP DOES:
-
-3) Add docstring for the methods and classes.
-You can see some examples here:
-https://www.programiz.com/python-programming/docstrings
 
 WHEN PULL REQUESTING:
 - Tell Ali that you made the paths of LocationProject/trial_data.ipynb private but not the extracting_graphs.ipynb since they are relative paths.
+- Did not add docstrings to private functions
