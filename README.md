@@ -29,6 +29,11 @@ Districts searched:
 >>guess_accumulate = GatherLoc(city_list=city_list, files=files)
 >>guess_accumulate.get_user_loc(city_data=city_data, main_data_path=main_data_path, result_path_JSON=result_path)
 ```
+Example output of the function:
+```
+515098it [31:21, 273.72it/s, Count=515098, Successful Count=117343, List1 idx=None, List2 idx=None]
+```
+
 ### Explanation
 ```city_parts``` fills up the empty dictionaries of ```GatherFiles``` object. These dictionaries are needed for the creation of a ```GatherLoc``` object
 - ```path_excel``` example: ```data/city_street.xlsx```
@@ -45,10 +50,6 @@ Districts searched:
     - ```main_data_path``` path to the main data (that is, data collected via Twitter API v1)
     - ```result_path_JSON``` path which the end result of city_data will be written to. Must be JSON format
 
-Example output of the function:
-```
-515098it [31:21, 273.72it/s, Count=515098, Successful Count=117343, List1 idx=None, List2 idx=None]
-```
 
 More functions and their usage examples are on ```trial_data.ipynb```
 
