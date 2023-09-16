@@ -48,7 +48,7 @@ Example output of the function:
 - Arguments:
     - ```city_data``` a dictionary with city names as keys and some integer value as values.
     - ```main_data_path``` path to the main data (that is, data collected via Twitter API v1)
-    - ```result_path_JSON``` path which the end result of city_data will be written to. Must be JSON format
+    - ```result_path_JSON``` path which the end result of city_data will be written to. Must be a json file
 
 
 More functions and their usage examples are on ```trial_data.ipynb```
