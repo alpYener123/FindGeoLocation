@@ -1,3 +1,6 @@
+# Paths used in gathering the trial_data
+LocationProject/paths.py
+
 # Byte-compiled / optimized / DLL files
 **/__pycache__/
 *.py[cod]
