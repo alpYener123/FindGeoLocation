@@ -12,8 +12,10 @@
 
 >>guess_accumulate = GatherLoc(city_list, files)
 >>guess_accumulate.get_user_loc(city_data, main_data_path, result_path, result_txt_path)
+```
+Example output of the function:
+```
 515098it [31:21, 273.72it/s, Count=515098, Successful Count=117343, List1 idx=None, List2 idx=None]
-# Example output of finished run
 ```
 
 
