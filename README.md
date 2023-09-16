@@ -31,7 +31,9 @@ Districts searched:
 ```
 ### Explanation
 ```city_parts``` fills up the empty dictionaries of ```GatherFiles``` object.
-- ```path_excel``` example: ```data/city_street.xlsx``` <br />
+- ```path_excel``` example: ```data/city_street.xlsx```
+ <br />
+ 
 ```city_list_and_data``` returns a list of cities. Also saves a json file as all city names as keys and all values defaultly set to 0.
 - ```cities_path``` example: ```data/cities.txt```
 - ```datapathJSON``` a json path which the json file is written onto.
