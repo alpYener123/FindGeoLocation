@@ -9,3 +9,4 @@ link: http://160.75.25.161/index.php/itudergisi_a/article/viewFile/1060/1009
 
 "Improved competitiveness, as we all know, is the path to economic nirvana. Plainly, it is a sought-after property of any economy."
 link: https://journals.sagepub.com/doi/epdf/10.1080/0042098993222
+
