@@ -139,7 +139,19 @@ class GatherLoc:
             loc = loc.split(" ")
         loc = [element.replace(" ", "") for element in loc]
 
-        return loc
+        # Added this part to find the cities correctly
+        return_loc = []
+        for item in loc:
+            if "maras" in item:
+                item = item.replace("maras", "kahramanmaras")
+            elif "afyon" in item:
+                item = item.replace("afyon", "afyonkarahisar")
+            elif "urfa" in item:
+                item = item.replace("urfa", "sanliurfa")
+            
+            return_loc.append(item)
+
+        return return_loc
 
     def get_user_loc(self, city_data, main_data_path, result_path_JSON, user_list_path_TXT = None, guess=False, **kwargs):
         '''Gets the location data on the ["user"]["location"] part of the metadata\n
@@ -202,6 +214,7 @@ class GatherLoc:
 
                     if tweet["user"]["location"] != '':
                         loc = self._lower_unidecode(tweet["user"]["location"])
+                        
 
                         common_elements = set(loc).intersection(self.cityList)    
                         if common_elements:
