@@ -15,7 +15,6 @@ class GatherLoc:
     get_tweet_coord --> Gets the location data on the ["geo"] part of the metadata by reverse geocoding\n
     '''
 
-
     def __init__(self, city_list, files, population_path = None):
         '''IMPORTANT: if guess feature is going to be used, population_path cannot be None\n
         Example population_path file is on Github'''
@@ -55,7 +54,6 @@ class GatherLoc:
         city = self.cityList[final_idx]
         return city
 
-    
     @staticmethod
     def _get_populations(pathJSON):
         # Will be used if population path is given when initializing
@@ -71,7 +69,6 @@ class GatherLoc:
                 if key not in common:
                     common += (key+",")
         return common
-
     
     def _find_cities(self, dct, target_string):
         # Finds the cities with the string and turns it into a list
@@ -142,11 +139,11 @@ class GatherLoc:
         # Added this part to find the cities correctly
         return_loc = []
         for item in loc:
-            if "maras" in item:
+            if "maras" in item and "kahramanmaras" not in item:
                 item = item.replace("maras", "kahramanmaras")
-            elif "afyon" in item:
+            elif "afyon" in item and "afyonkarahisar" not in item:
                 item = item.replace("afyon", "afyonkarahisar")
-            elif "urfa" in item:
+            elif "urfa" in item and "sanliurfa" not in item:
                 item = item.replace("urfa", "sanliurfa")
             
             return_loc.append(item)
@@ -219,6 +216,7 @@ class GatherLoc:
                         common_elements = set(loc).intersection(self.cityList)    
                         if common_elements:
                             city = list(common_elements)[0]
+
                             city_data[city] += 1
                             memberCNT += 1
                             user_list.append(tweet["user"]["id"])
@@ -253,7 +251,6 @@ class GatherLoc:
             with open(user_list_path_TXT, 'w') as file:
                 for item in user_list:
                     file.write(str(item) + '\n')
-
 
     def get_tweet_loc(self, city_data, main_data_path, result_path_JSON, user_list_path_TXT = None, guess=False, **kwargs):
         '''Gets the location data on the ["place"]["full_name"] part of the metadata\n
@@ -323,6 +320,7 @@ class GatherLoc:
                             common_elements = set(loc).intersection(self.cityList)
                             if common_elements:
                                 city = list(common_elements)[0]
+
                                 user_dict[city] += 1
                                 went_in = True
                                 to_be_appended = tweet["user"]["id"]
