@@ -6,7 +6,7 @@ Works for Turkish cities only.
 
 First, gather the necessary files via class GatherFiles. Then, conduct the search. An example can be found below. The necessary data for the GatherFiles object can be found under ```data/```
 
-Population bias 
+Population bias:
 - Active: If a district name is included in multiple cities, estimate that the tweet is from the city with the larger population. pop_bias parameter is set to ```False``` by default.
 - Inactive: Do not do this
 
