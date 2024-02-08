@@ -18,19 +18,17 @@ Districts searched:
 ## Example
 
 ```python
-from TweetLocationFinder import GatherFiles and GatherLoc
->>files = GatherFiles()
->>files.city_parts(path_excel)
->>city_list = files.city_list_and_data(cities_path=city_list_path, data_path_json=empty_data_path)
->>city_data = files.get_city_data(empty_data_path)
-# Gather the files needed to create GatherLoc object
+from TPS import GatherFiles, GatherLoc
+files = GatherFiles()
+files.create_district_mappings(path_excel) # the excel which is named city_street.xlsx on data/
+city_list = files.write_data_return_list(cities_path=city_list_path, data_path_json=empty_data_path)
+# cities_path: a list of cities. Can be found on data/
+# data_path_json: just a regular file name, ending with .json. This is going to be written with the function
 
->>guess_accumulate = GatherLoc(city_list=city_list, files=files)
->>guess_accumulate.get_user_loc(city_data=city_data, main_data_path=main_data_path, result_path_JSON=result_path)
-```
-Example output of the function:
-```
-515098it [31:21, 273.72it/s, Count=515098, Successful Count=117343, List1 idx=None, List2 idx=None]
+city_data = files.get_city_data(empty_data_path)
+# Gathered the files needed to create GatherLoc object
+
+tps_finder = get_locations(city_data=city_data, data_folder_path=dir_path, which_metadata="user_bio", path_result="v2_trial_tweet-based.json", api_version=2, user=False, retweets=True, path_dates="dates.txt", path_texts=txt_path, search_keyword="@RTErdogan", date_window=[[2023,4,10], 6])
 ```
 
 ### Explanation
