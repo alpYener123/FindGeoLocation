@@ -28,7 +28,9 @@ city_list = files.write_data_return_list(cities_path=city_list_path, data_path_j
 city_data = files.get_city_data(empty_data_path)
 # Gathered the files needed to create GatherLoc object
 
-tps_finder = get_locations(city_data=city_data, data_folder_path=dir_path, which_metadata="user_bio", path_result="v2_trial_tweet-based.json", api_version=2, user=False, retweets=True, path_dates="dates.txt", path_texts=txt_path, search_keyword="@RTErdogan", date_window=[[2023,4,10], 6])
+tps_finder = GatherLoc(city_list=city_list, files=files)
+
+tps_finder.get_locations(city_data=city_data, data_folder_path=dir_path, which_metadata="user_bio", path_result="v2_trial_tweet-based.json", api_version=2, user=False, retweets=True, path_dates="dates.txt", path_texts=txt_path, search_keyword="@RTErdogan", date_window=[[2023,4,10], 6])
 ```
 
 ### Explanation
