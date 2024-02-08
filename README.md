@@ -1,6 +1,6 @@
-# TPS
+# TPS -- Turkey Positioning System
 
-TPS (Turkey Positioning System), detects city-level locations of tweets that were collected via Twitter API v1 or v2
+TPS, detects city-level locations of tweets that were collected via Twitter API v1 or v2
 
 Works for Turkish cities only.
 
