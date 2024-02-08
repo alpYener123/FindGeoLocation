@@ -4,14 +4,11 @@ TPS (Turkey Positioning System), detects city-level locations of tweets that wer
 
 Works for Turkish cities only.
 
-3 ways to get the location from the metadata
-- ["user"]["location"]
-- ["place"]["full_name"]
-- ["geo"]
+First, gather the necessary files via class GatherFiles. Then, conduct the search. An example can be found below. The necessary data for the GatherFiles object can be found under ```data/```
 
-2 main ways: To guess or not to guess
-- Guess: If a person has entered a district name that is included in multiple cities, estimate that the person is from the city with the larger population. Guess parameter is set to ```False``` by default.
-- No guess: If multiple cities are found, skip that district and search for a more specific (smaller) one
+Population bias 
+- Active: If a district name is included in multiple cities, estimate that the tweet is from the city with the larger population. pop_bias parameter is set to ```False``` by default.
+- Inactive: Do not do this
 
 Districts searched:
 - City name
@@ -21,7 +18,7 @@ Districts searched:
 ## Example
 
 ```python
->>from TweetLocationFinder import GatherFiles and GatherLoc
+from TweetLocationFinder import GatherFiles and GatherLoc
 >>files = GatherFiles()
 >>files.city_parts(path_excel)
 >>city_list = files.city_list_and_data(cities_path=city_list_path, data_path_json=empty_data_path)
