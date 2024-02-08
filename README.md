@@ -1,6 +1,6 @@
-# FindGeoLocation
+# TPS
 
-Finds city-level locations of tweets that were collected via Twitter API v1.
+TPS (Turkey Positioning System), detects city-level locations of tweets that were collected via Twitter API v1 or v2
 
 Works for Turkish cities only.
 
