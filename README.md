@@ -2,7 +2,7 @@
 
 TPS, detects city-level locations of tweets that were collected via Twitter API v1 or v2
 
-Works for Turkish cities only.
+Works for Turkish cities only with the default data from src/data. Can be modified for other countries as well.
 
 First, gather the necessary files via class GatherFiles. Then, conduct the search. An example can be found below. The necessary data for the GatherFiles object can be found under ```data/```
 
