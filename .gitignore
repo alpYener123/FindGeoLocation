@@ -1,5 +1,7 @@
 # Paths used in gathering the trial_data
-LocationProject/paths.py
+venv
+archive
+**/paths.py
 
 # Byte-compiled / optimized / DLL files
 **/__pycache__/

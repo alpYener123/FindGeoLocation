@@ -1,0 +1,25 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "example_package_YOUR_USERNAME_HERE"
+version = "0.0.1"
+authors = [
+  { name="Alp Yener", email="alpondery@gmail.com" },
+  { name="Ali Najafi", email="najafi1998ali@gmail.com" },
+  { name="Onur Varol", email="onur.varol@sabanciuniv.edu" },
+
+]
+description = "TPS, detects city-level locations of tweets in Turkey by providing the metadata information of tweets"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/alpYener123/TPS"
+Issues = "https://github.com/alpYener123/TPS/issues"
