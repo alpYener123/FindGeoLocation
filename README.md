@@ -1,48 +1,58 @@
 # TPS -- Turkey Positioning System
 
-TPS, detects city-level locations of tweets that were collected via Twitter API v1 or v2
+TPS, detects city-level locations of tweets that were collected via Twitter API v1 and v2
 
-Works for Turkish cities only with the default data from src/data. Can be modified for other countries as well.
+Works for Turkish cities only with the default data from ```src/data```. Can be modified for other countries as well.
 
-First, gather the necessary files via class GatherFiles. Then, conduct the search. An example can be found below. The necessary data for the GatherFiles object can be found under ```data/```
+First, gather the necessary files via class GatherFiles. Then, conduct the search. A sample run can be found in ```main.py```. 2 examples are given in folder ```examples_and_figs```.
 
-Population bias:
-- Active: If a district name is included in multiple cities, estimate that the tweet is from the city with the larger population. pop_bias parameter is set to ```False``` by default.
-- Inactive: Do not do this
-
-Districts searched:
+Locations searched in order to map the tweet to a city:
 - City name
 - "Ilçe" name (smaller part of a city)
 - "Semt" name (smaller part of an ilçe)
 
-## Example
+## Features
+Population bias:
+- Active: If a district name is included in multiple cities, estimate that the tweet is from the city with the larger population. pop_bias parameter is set to ```False``` by default.
+- Inactive: Do not do this
 
-```python
-from TPS import GatherFiles, GatherLoc
-files = GatherFiles()
-files.create_district_mappings(path_excel) # the excel which is named city_street.xlsx on data/
-city_list = files.write_data_return_list(cities_path=city_list_path, data_path_json=empty_data_path)
-# cities_path: a list of cities. Can be found on data/
-# data_path_json: just a regular file name, ending with .json. This is going to be written with the function
+Retweets:
+- It can either filter out or keep retweets during the search
 
-city_data = files.get_city_data(empty_data_path)
-# Gathered the files needed to create GatherLoc object
+User or tweet based:
+- It can either find locations of users or tweets.
+- For users, say that the user has 10 tweets, the system maps all the tweets to a city if possible. Then, the user is mapped to the city on which the user has most tweets in.
 
-tps_finder = GatherLoc(city_list=city_list, files=files)
+Keyword search:
+- It can filter out tweets such that they need to include a specific phrase in their tweet text. This can be, for example, a popular username.
 
-tps_finder.get_locations(city_data=city_data, data_folder_path=dir_path, which_metadata="user_bio", path_result="v2_trial_tweet-based.json", api_version=2, user=False, retweets=True, path_dates="dates.txt", path_texts=txt_path, search_keyword="@RTErdogan", date_window=[[2023,4,10], 6])
-```
+Date window:
+- It can search for tweets coming from a specific time window.
+- Examples: [[2023,10,7], 15]. From the specified date (Y/M/D), go +- 15 days. That is the interval.
 
-## Links Used
+Priority queue:
+- It can search for specific location metadata, by the given order.
+- Available location metadata:
+    - V1
+        - user_bio: ["user"]["location"]
+        - tweet: ["place"]["full_name"]
+        - coordinates: ["geo"]
 
-```data/city_street.xlsx``` --> https://postakodu.ptt.gov.tr/ <br />
+    - V2
+        - user_bio: ["includes"]["users"][0]["location"]
+        - tweet: ["includes"]["places"][0]["full_name"]
 
-```data/cities.txt``` --> https://engelsizdestek.org/iller <br />
+## References
+Links for the sources that contents in ```src/data/``` were obtained.
 
-```data/populations.json``` --> https://gist.github.com/ozdemirburak/4821a26db048cc0972c1beee48a408de <br />
-The populations here are modified via: ```data/illere-gore-il-nufuslari.xls``` --> https://data.tuik.gov.tr/Bulten/Index?p=49685
+```cities.txt```: https://engelsizdestek.org/iller <br />
 
+```city_mapper.xlsx```: https://postakodu.ptt.gov.tr/ <br />
+
+```populations.json```: https://github.com/alpers/Turkey-Maps-GeoJSON. The populations here are updated from ```yillara-gore-il-nufuslari.xls``` <br />
+
+```yillara-gore-il-nufuslari.xls```: https://data.tuik.gov.tr/Bulten/Index?p=49685. Populations for the year 2022 were used. <br />
 
 ```data/turkey.geojson``` --> https://github.com/alpers/Turkey-Maps-GeoJSON <br />
 
-```graphs/explanation/overestimated_cities.png``` --> http://160.75.25.161/index.php/itudergisi_a/article/viewFile/1060/1009
+Special thanks to Onur Varol and Ali Najafi.

@@ -52,6 +52,6 @@ tps_finder.get_locations(
     user=args.user_search,
     search_keyword=args.search_keyword,
     date_window=args.date_window,
-    gpd_path="src/data/turkey.geojson",
-    priority_queue="user_bio,tweet,coordinates",
+    gpd_path=args.geopandas_path,
+    priority_queue=args.priority_queue,
 )
