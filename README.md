@@ -4,7 +4,7 @@ TPS, detects city-level locations of tweets that were collected via Twitter API 
 
 Works for Turkish cities only with the default data from ```src/data```. Can be modified for other countries as well.
 
-First, gather the necessary files via class GatherFiles. Then, conduct the search. A sample run can be found in ```main.py```. 2 examples are given in folder ```examples_and_figs```.
+First, gather the necessary files via class GatherFiles. Then, conduct the search. A sample run can be found in ```main.py```. 2 examples are given in folder ```examples_and_figs```, their codes are given in ```src/examples.py```.
 
 Locations searched in order to map the tweet to a city:
 - City name

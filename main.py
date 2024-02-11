@@ -1,6 +1,6 @@
 import argparse
 from pathlib import Path
-from TPS import GatherFiles, GatherLoc
+from src.TPS import GatherFiles, GatherLoc
 
 # Parse arguments
 parser = argparse.ArgumentParser(
