@@ -54,7 +54,7 @@ Links for the sources that contents in ```src/data/``` were obtained.
 
 ```city_mapper.xlsx```: https://postakodu.ptt.gov.tr/ <br />
 
-```populations.json```: https://github.com/alpers/Turkey-Maps-GeoJSON. The populations here are updated from ```yillara-gore-il-nufuslari.xls``` <br />
+```populations.json```: [https://github.com/alpers/Turkey-Maps-GeoJSON](https://gist.github.com/ozdemirburak/4821a26db048cc0972c1beee48a408de). The populations here are updated from ```yillara-gore-il-nufuslari.xls``` <br />
 
 ```yillara-gore-il-nufuslari.xls```: https://data.tuik.gov.tr/Bulten/Index?p=49685. Populations for the year 2022 were used. <br />
 
