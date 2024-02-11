@@ -59,5 +59,3 @@ Links for the sources that contents in ```src/data/``` were obtained.
 ```yillara-gore-il-nufuslari.xls```: https://data.tuik.gov.tr/Bulten/Index?p=49685. Populations for the year 2022 were used. <br />
 
 ```data/turkey.geojson``` --> https://github.com/alpers/Turkey-Maps-GeoJSON <br />
-
-Special thanks to Onur Varol and Ali Najafi.
