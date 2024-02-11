@@ -1,5 +1,5 @@
 from src.TPS import GatherFiles, GatherLoc
-from examples_and_figs.paths import *
+from paths import *
 
 # Example 1: API V1 with retweet and user-based search
 
