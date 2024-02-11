@@ -1,4 +1,4 @@
-import gzip 
+import gzip
 import json
 from tqdm import tqdm
 from unidecode import unidecode
@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 from collections import defaultdict
 import re
 from glob import glob
+
 
 class GatherLoc:
     """Gathers locations of twitter users\n
@@ -57,7 +58,9 @@ class GatherLoc:
         with open(pathJSON, "r", encoding="utf-8") as file:
             populations = json.load(file)
 
-        city2population = {unidecode(item["name"]).lower(): item["population"] for item in populations}
+        city2population = {
+            unidecode(item["name"]).lower(): item["population"] for item in populations
+        }
 
         return city2population
 
@@ -167,7 +170,6 @@ class GatherLoc:
         loc=None,
     ):
 
-
         if api_version == 1:
             if loc == "user_bio":
                 place = tweet["user"]["location"]
@@ -219,7 +221,6 @@ class GatherLoc:
                 user_id = tweet["user"]["id"]
                 tweet_id = int(tweet["id_str"])
 
-                
                 counted_before = False
                 for check in previous_checks:
                     if check != None:
@@ -251,7 +252,6 @@ class GatherLoc:
                 if counted_before:
                     return None
 
-
                 elif tweet_id not in collected_ids:
                     collected_ids[tweet_id] = append_info
 
@@ -270,8 +270,8 @@ class GatherLoc:
                         return None
                 else:
                     return None
-                
-            elif loc=="coordinates":
+
+            elif loc == "coordinates":
                 return 40
 
             text = (tweet["data"]["text"]).replace("\n", " ")
@@ -300,7 +300,6 @@ class GatherLoc:
 
             append_info = [place, date, text]
 
-    
             if keep_retweets == False:
                 if tweet["data"].get("referenced_tweets") == None:
                     return None
@@ -321,7 +320,6 @@ class GatherLoc:
                 if counted_before:
                     return None
 
-
                 elif user_id in collected_ids:
                     tweet_id = int(tweet["data"]["id"])
                     if tweet_id not in collected_ids[user_id]:
@@ -334,10 +332,8 @@ class GatherLoc:
             else:
                 tweet_id = int(tweet["data"]["id"])
 
-                
-                
                 counted_before = False
-                
+
                 for check in previous_checks:
                     if check != None:
                         if tweet_id in check:
@@ -407,14 +403,12 @@ class GatherLoc:
                             if city is not None:
                                 user_dict[city] += 1
 
-
                             else:
                                 city = self._return_city(
                                     location_candidates, self.semt2city_mapper, guess
                                 )
                                 if city is not None:
                                     user_dict[city] += 1
-
 
                     city = max(user_dict, key=user_dict.get)
                     if user_dict[city] > 0:
@@ -430,12 +424,8 @@ class GatherLoc:
                         new_dict = {}
                         new_dict["type"] = "Point"
                         new_dict["coordinates"] = []
-                        new_dict["coordinates"].append(
-                            ids[tweets][0]["coordinates"][1]
-                        )
-                        new_dict["coordinates"].append(
-                            ids[tweets][0]["coordinates"][0]
-                        )
+                        new_dict["coordinates"].append(ids[tweets][0]["coordinates"][1])
+                        new_dict["coordinates"].append(ids[tweets][0]["coordinates"][0])
 
                         geometry = Point(new_dict["coordinates"])
 
@@ -486,8 +476,19 @@ class GatherLoc:
         except json.JSONDecodeError as e:
             return None
 
-    def _fill_city_data(self, all_files, user, keep_retweets, search_keyword, date_window, search_element, pop_bias, df, previous_checks):
-        
+    def _fill_city_data(
+        self,
+        all_files,
+        user,
+        keep_retweets,
+        search_keyword,
+        date_window,
+        search_element,
+        pop_bias,
+        df,
+        previous_checks,
+    ):
+
         total_count = 0  # total tweet count
         first_check = True
 
@@ -499,7 +500,7 @@ class GatherLoc:
         # OR: ids[tweet_id] = [place, date, text]
         for file_name in all_files:
             with gzip.open(file_name, "rt") as fh:
-                
+
                 print("Now on file " + file_name)
 
                 pbar = tqdm(fh)
@@ -509,7 +510,7 @@ class GatherLoc:
                     if did_load_correctly == 4:
                         tweet = json.loads(line)
                         total_count += 1  # dict ids is filled up here
-                        
+
                         if first_check:
                             result = self._extract_place(
                                 tweet,
@@ -525,7 +526,7 @@ class GatherLoc:
 
                             if result == 40:
                                 return
-                            
+
                             first_check = False
 
                         else:
@@ -540,14 +541,14 @@ class GatherLoc:
                                 api_version=2,
                                 loc=search_element,
                             )
-        
+
                     else:
                         uid, data = line.split("\t")
                         data = json.loads(data)
                         for tweet in data:
 
                             total_count += 1  # dict ids is filled up here
-                            
+
                             self._extract_place(
                                 tweet,
                                 user,
@@ -562,17 +563,14 @@ class GatherLoc:
 
                     pbar.set_postfix({"Total tweet count": total_count})
 
-
         use_coordinates = False
         if search_element == "coordinates":
-            use_coordinates=True
+            use_coordinates = True
         self._map_places_to_data(
             ids, user, pop_bias, use_coordinates=use_coordinates, gpd_df=df
         )
 
-
         return ids
-    
 
     # Previous name: get_textual_locations
     def get_locations(
@@ -586,55 +584,65 @@ class GatherLoc:
         search_keyword=None,
         date_window=None,
         gpd_path="src/data/turkey.geojson",
-        priority_queue="coordinates,user_bio,tweet",    
+        priority_queue="coordinates,user_bio,tweet",
     ):
         """Gets the textual location information on the tweet\n
         city_data: json file consisting of cities as keys and integers as values\n
-        main_data_path: path to the data, zipped in gzip\n
-        data_folder_path: path to the folder, containing gzip files\n
+        data_path: path to the data\n
         path_result: the json path where the updated city_data will be written onto\n
-        all_info_path: json path to write the dictionary where dict[user_id][tweet_id] = [location, date, text] is the format\n
-        which_metadata: "user_loc" or "tweet (or "coordinates" if API v1 is used)"\n
+        verbose: whether to save other information of the tweet as well (text, date, place)\n
+        priority_queue: in which order will the search be conducted\n
         !! If "coordinates" is used, gdp_path must not be empty\n
-        other path parameters: txt paths, storing the contect which is what their names suggests\n
         pop_bias: whether to have a population bias or not\n
-        retweets: whether to look at retweets or not\n
+        keep_retweets: whether to look at retweets or not\n
         user: whether to conduct the search user-based or tweet-based\n
         search_keyword: whether to only get the tweets that include a specific keyword on their text\n
         date_window: format [[2023,10,7], 15]. This means, +-15 days from the date given [year,month,date]\n
-        kwargs: lists of user/tweet ids to skip"""
+        """
 
         if os.path.exists(output_dir) and os.path.isdir(output_dir):
             pass
         else:
             print("Directory does not exist.")
             return
-        
+
         if gpd_path != None:
             df = gpd.read_file(gpd_path)
         else:
-            gpd_path=None   
+            gpd_path = None
 
         print("Starting to gather place information...")
 
         all_files = []
-        if data_path[-1] == '/':
+        if data_path[-1] == "/":
             all_files = list(glob("/" + data_path.strip("/") + "/*.jsons.gz"))
         else:
             all_files.append(data_path)
 
-        priority_queue = priority_queue.split(',')
+        priority_queue = priority_queue.split(",")
 
         previous_checks = []
 
         for element in priority_queue:
-            ids = self._fill_city_data(all_files, user, keep_retweets, search_keyword, date_window, element, pop_bias, df, previous_checks)
+            ids = self._fill_city_data(
+                all_files,
+                user,
+                keep_retweets,
+                search_keyword,
+                date_window,
+                element,
+                pop_bias,
+                df,
+                previous_checks,
+            )
 
             previous_checks.append(ids)
-            
+
             if verbose == 1:
-                with open(output_dir+"all_info_" + element + ".json", "w", encoding="utf-8") as json_file:
+                with open(
+                    output_dir + "all_info_" + element + ".json", "w", encoding="utf-8"
+                ) as json_file:
                     json.dump(ids, json_file, indent=2)
 
-            with open(output_dir+"results_" + element + ".json", "w") as file:
+            with open(output_dir + "results_" + element + ".json", "w") as file:
                 json.dump(self.city_data, file, indent=4)
