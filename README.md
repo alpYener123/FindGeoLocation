@@ -11,6 +11,11 @@ Locations searched in order to map the tweet to a city:
 - "Ilçe" name (smaller part of a city)
 - "Semt" name (smaller part of an ilçe)
 
+## Usage
+One can use this tool via downloading the repository and running main.py.
+```main.py``` and ```src/``` are the main contents needed for usage.
+
+
 ## Features
 Population bias:
 - Active: If a district name is included in multiple cities, estimate that the tweet is from the city with the larger population. pop_bias parameter is set to ```False``` by default.
